@@ -1,5 +1,7 @@
 // Entry point
 
+
+
 @bs.val external document: 'a = "document"
 
 // We're using raw DOM manipulations here, to avoid making you read
@@ -9,16 +11,16 @@ let style = document["createElement"]("style")
 document["head"]["appendChild"](style)
 style["innerHTML"] = ExampleStyles.style
 
-let makeContainer = text => {
+let makeContainer = () => {
   let container = document["createElement"]("div")
   container["className"] = "container"
 
   let title = document["createElement"]("div")
   title["className"] = "containerTitle"
-  title["innerText"] = text
 
   let content = document["createElement"]("div")
   content["className"] = "containerContent"
+  content["id"] = "containerContent"
 
   let () = container["appendChild"](title)
   let () = container["appendChild"](content)
@@ -27,18 +29,5 @@ let makeContainer = text => {
   content
 };
 
-
-ReactDOMRe.render(
-  <ReducerFromReactJSDocs />,
-  makeContainer("Reducer From ReactJS Docs"),
-)
-
-ReactDOMRe.render(
-  <FetchedDogPictures />,
-  makeContainer("Fetched Dog Pictures"),
-)
-
-ReactDOMRe.render(
-  <ReasonUsingJSUsingReason />,
-  makeContainer("Reason Using JS Using Reason"),
-)
+makeContainer()
+ReactDOM.render(<Header />, document["getElementById"]("containerContent"))
