@@ -2,11 +2,10 @@
 
 var React = require("react");
 var ReactDom = require("react-dom");
-var ExampleStyles$ReactCrudBlog = require("./ExampleStyles.bs.js");
-var BlinkingGreeting$ReactCrudBlog = require("./BlinkingGreeting/BlinkingGreeting.bs.js");
-var FetchedDogPictures$ReactCrudBlog = require("./FetchedDogPictures/FetchedDogPictures.bs.js");
-var ReducerFromReactJSDocs$ReactCrudBlog = require("./ReducerFromReactJSDocs/ReducerFromReactJSDocs.bs.js");
-var ReasonUsingJSUsingReason$ReactCrudBlog = require("./ReasonUsingJSUsingReason/ReasonUsingJSUsingReason.bs.js");
+var ExampleStyles$ReactCrudBlog = require("./styles/ExampleStyles.bs.js");
+var FetchedDogPictures$ReactCrudBlog = require("./components/FetchedDogPictures/FetchedDogPictures.bs.js");
+var ReducerFromReactJSDocs$ReactCrudBlog = require("./components/ReducerFromReactJSDocs/ReducerFromReactJSDocs.bs.js");
+var ReasonUsingJSUsingReason$ReactCrudBlog = require("./components/ReasonUsingJSUsingReason/ReasonUsingJSUsingReason.bs.js");
 
 var style = document.createElement("style");
 
@@ -27,10 +26,6 @@ function makeContainer(text) {
   document.body.appendChild(container);
   return content;
 }
-
-ReactDom.render(React.createElement(BlinkingGreeting$ReactCrudBlog.make, {
-          children: "Hello!"
-        }), makeContainer("Blinking Greeting"));
 
 ReactDom.render(React.createElement(ReducerFromReactJSDocs$ReactCrudBlog.make, {}), makeContainer("Reducer From ReactJS Docs"));
 
