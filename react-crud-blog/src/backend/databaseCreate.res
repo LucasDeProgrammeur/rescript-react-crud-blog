@@ -1,6 +1,5 @@
-module CreateDB = {
+module CreateDB = () => {
   @bs.new @bs.module("sqlite3") external database: string => 't = "Database"
-  let initDb = () => {
     let db = database(":memory:")
 
     Js.log("Console.log vanuit databasecreate")
@@ -20,5 +19,4 @@ module CreateDB = {
     })
 
     db["close"]()
-  }
 }

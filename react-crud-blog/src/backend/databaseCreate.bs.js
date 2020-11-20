@@ -2,7 +2,7 @@
 
 var Sqlite3 = require("sqlite3");
 
-function initDb(param) {
+function CreateDB($star) {
   var db = new Sqlite3.Database(":memory:");
   console.log("Console.log vanuit databasecreate");
   db.serialize(function (param) {
@@ -17,12 +17,11 @@ function initDb(param) {
                       
                     }));
       });
-  return db.close();
+  db.close();
+  return {
+          db: db
+        };
 }
-
-var CreateDB = {
-  initDb: initDb
-};
 
 exports.CreateDB = CreateDB;
 /* sqlite3 Not a pure module */

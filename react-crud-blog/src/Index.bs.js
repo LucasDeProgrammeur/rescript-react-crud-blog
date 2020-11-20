@@ -2,7 +2,7 @@
 
 var React = require("react");
 var ReactDom = require("react-dom");
-var Header$ReactCrudBlog = require("./components/Header/Header.bs.js");
+var App$ReactCrudBlog = require("./components/App/App.bs.js");
 var ExampleStyles$ReactCrudBlog = require("./styles/ExampleStyles.bs.js");
 
 var style = document.createElement("style");
@@ -27,7 +27,7 @@ function makeContainer(param) {
 
 makeContainer(undefined);
 
-ReactDom.render(React.createElement(Header$ReactCrudBlog.make, {}), document.getElementById("containerContent"));
+ReactDom.render(React.createElement(App$ReactCrudBlog.make, {}), document.getElementById("containerContent"));
 
 exports.style = style;
 exports.makeContainer = makeContainer;

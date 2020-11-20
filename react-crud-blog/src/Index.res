@@ -30,4 +30,4 @@ let makeContainer = () => {
 };
 
 makeContainer()
-ReactDOM.render(<Header />, document["getElementById"]("containerContent"))
+ReactDOM.render(<App />, document["getElementById"]("containerContent"))
