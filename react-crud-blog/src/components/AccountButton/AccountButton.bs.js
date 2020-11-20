@@ -1,10 +1,15 @@
 'use strict';
 
 var React = require("react");
+var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 
 function AccountButton(Props) {
+  ReasonReactRouter.useUrl(undefined, undefined);
   return React.createElement("button", {
-              className: "accountButton"
+              className: "accountButton",
+              onClick: (function (e) {
+                  return ReasonReactRouter.push("/login");
+                })
             }, "Login");
 }
 

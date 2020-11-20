@@ -5,7 +5,7 @@
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",
     "clean": "bsb -clean-world",
-    "server": "moduleserve ./ --port 8000",
+    "server": "moduleserve ./ --port 8000 --spa",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -20,6 +20,7 @@
     "@material-ui/core": "^4.11.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
+    "react-router-dom": "^5.2.0",
     "reason-react": ">=0.7.1",
     "sqlite3": "^5.0.0"
   },

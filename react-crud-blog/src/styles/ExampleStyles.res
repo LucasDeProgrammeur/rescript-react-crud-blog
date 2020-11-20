@@ -8,12 +8,17 @@ let style = j`
      background-color: rgb(42, 64, 85);
      margin: 0;
      padding: 10px;
+     height: 45px;
  }
 
+h1 {
+    color: white;
+    margin-left: 20px;
+}
  header h1 {
      margin: 0;
-     color: white;
-     margin-left: 20px
+     margin-left: 20px;
+    float: left;
  }
 
  body {
@@ -54,5 +59,15 @@ let style = j`
 
  .postContent {
      margin: 20px 70px;
+ }
+
+ .accountButton {
+     font-family: 'Open Sans', sans-serif;
+     float: right;
+     height: 100%;
+ }
+
+ .centerText {
+     text-align: center;
  }
 `;

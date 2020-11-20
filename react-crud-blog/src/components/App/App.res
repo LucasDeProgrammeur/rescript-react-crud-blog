@@ -1,7 +1,15 @@
+
+
 @react.component
 let make = () => {
+  let url = ReasonReactRouter.useUrl()
+
   <>
     <Header />
-    <MainContent />
+    {switch url.path {
+    | list{"login"} => <LoginContent />
+    | list{"home"} => <MainContent />
+    | _ => <MainContent />
+    }}
   </>
 }
