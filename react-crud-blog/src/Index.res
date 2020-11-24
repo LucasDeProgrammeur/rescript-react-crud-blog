@@ -4,6 +4,8 @@
 
 @bs.val external document: 'a = "document"
 
+
+
 // We're using raw DOM manipulations here, to avoid making you read
 // ReasonReact when you might precisely be trying to learn it for the first
 // time through the examples later.
@@ -28,6 +30,10 @@ let makeContainer = () => {
 
   content
 };
+
+Js.log(DatabaseFunctions.getSpecificUser(1))
+
+let getUsers = Js.Promise.make((~resolve, ~reject) => resolve(., Js.log(Js.Json.stringifyAny(DatabaseFunctions.getSpecificUser(1)))))
 
 makeContainer()
 ReactDOM.render(<App />, document["getElementById"]("containerContent"))

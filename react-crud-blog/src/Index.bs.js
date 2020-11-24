@@ -4,6 +4,7 @@ var React = require("react");
 var ReactDom = require("react-dom");
 var App$ReactCrudBlog = require("./components/App/App.bs.js");
 var ExampleStyles$ReactCrudBlog = require("./styles/ExampleStyles.bs.js");
+var DatabaseFunctions$ReactCrudBlog = require("./backend/DatabaseFunctions.bs.js");
 
 var style = document.createElement("style");
 
@@ -25,10 +26,17 @@ function makeContainer(param) {
   return content;
 }
 
+console.log(DatabaseFunctions$ReactCrudBlog.getSpecificUser(1));
+
+var getUsers = new Promise((function (resolve, reject) {
+        return resolve((console.log(JSON.stringify(DatabaseFunctions$ReactCrudBlog.getSpecificUser(1))), undefined));
+      }));
+
 makeContainer(undefined);
 
 ReactDom.render(React.createElement(App$ReactCrudBlog.make, {}), document.getElementById("containerContent"));
 
 exports.style = style;
 exports.makeContainer = makeContainer;
+exports.getUsers = getUsers;
 /* style Not a pure module */

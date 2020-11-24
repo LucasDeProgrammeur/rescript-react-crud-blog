@@ -7,7 +7,18 @@ function LoginContent(Props) {
                   className: "centerText"
                 }, "Log into your account or sign up"), React.createElement("div", {
                   className: "loginBox"
-                }));
+                }, React.createElement("form", {
+                      method: "post"
+                    }, React.createElement("label", undefined, "Username"), React.createElement("input", {
+                          name: "username",
+                          type: "text"
+                        }), React.createElement("label", undefined, "Password"), React.createElement("input", {
+                          name: "password",
+                          type: "text"
+                        }), React.createElement("input", {
+                          type: "submit",
+                          value: "Login"
+                        }))));
 }
 
 var make = LoginContent;

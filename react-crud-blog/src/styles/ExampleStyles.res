@@ -67,6 +67,22 @@ h1 {
      height: 100%;
  }
 
+ .loginBox form input,  .loginBox form label {
+     display: block;
+     width: 80%;
+     margin: 10px auto; 
+     padding: 5px;
+ }
+
+.loginBox {
+    background-color: white;
+    border-radius: 5px;
+    width: 400px;
+    height: 600px;
+    margin: 20px auto;
+    box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.60);
+}
+
  .centerText {
      text-align: center;
  }
