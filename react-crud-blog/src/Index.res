@@ -27,6 +27,7 @@ let makeContainer = () => {
   let () = container["appendChild"](title)
   let () = container["appendChild"](content)
   let () = document["body"]["appendChild"](container)
+  let authenticated = LoginStates.LoggedOut
 
   content
 };
