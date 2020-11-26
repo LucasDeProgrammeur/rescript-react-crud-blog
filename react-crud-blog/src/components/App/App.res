@@ -9,6 +9,7 @@ let make = () => {
     {switch url.path {
     | list{"login"} => <LoginContent />
     | list{"home"} => <MainContent />
+    | list{"authentication"} => <Authentication />
     | _ => <MainContent />
     }}
   </>

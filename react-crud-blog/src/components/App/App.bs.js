@@ -5,6 +5,7 @@ var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 var Header$ReactCrudBlog = require("../Header/Header.bs.js");
 var MainContent$ReactCrudBlog = require("../MainContent/MainContent.bs.js");
 var LoginContent$ReactCrudBlog = require("../LoginContent/LoginContent.bs.js");
+var Authentication$ReactCrudBlog = require("../Authentication/Authentication.bs.js");
 
 function App(Props) {
   var url = ReasonReactRouter.useUrl(undefined, undefined);
@@ -13,6 +14,13 @@ function App(Props) {
   var exit = 0;
   if (match) {
     switch (match.hd) {
+      case "authentication" :
+          if (match.tl) {
+            exit = 1;
+          } else {
+            tmp = React.createElement(Authentication$ReactCrudBlog.make, {});
+          }
+          break;
       case "home" :
           if (match.tl) {
             exit = 1;

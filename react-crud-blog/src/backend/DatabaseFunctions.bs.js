@@ -1,5 +1,15 @@
 'use strict';
 
+var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
+var LoginStates$ReactCrudBlog = require("../constants/LoginStates.bs.js");
+
+var username = {
+  contents: "username"
+};
+
+var password = {
+  contents: "password"
+};
 
 function getSpecificUser(id) {
   fetch("https://localhost:44304/api/Users/" + String(id)).then(function (response) {
@@ -15,14 +25,27 @@ function getSpecificUser(id) {
   
 }
 
-function getUserByName(username) {
-  return fetch("https://localhost:44304/api/Users/name/" + username).then(function (response) {
+function handleLogin(username, password, param) {
+  return fetch("https://localhost:44304/api/Users/authenticate?username=" + username + "&password=" + password).then(function (response) {
                 return response.json();
               }).then(function (jsonResponse) {
-              return Promise.resolve(jsonResponse);
+              console.log(jsonResponse);
+              if (jsonResponse.id !== "2") {
+                LoginStates$ReactCrudBlog.authenticated.contents = /* LoggedIn */{
+                  userId: jsonResponse.id
+                };
+                ReasonReactRouter.push("home");
+              } else {
+                LoginStates$ReactCrudBlog.authenticated.contents = /* LoggedOut */0;
+              }
+              return Promise.resolve(function (param) {
+                          return ReasonReactRouter.push("home");
+                        });
             });
 }
 
+exports.username = username;
+exports.password = password;
 exports.getSpecificUser = getSpecificUser;
-exports.getUserByName = getUserByName;
-/* No side effect */
+exports.handleLogin = handleLogin;
+/* ReasonReactRouter Not a pure module */

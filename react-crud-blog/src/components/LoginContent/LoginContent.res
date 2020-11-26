@@ -8,6 +8,8 @@ type event = {
 let make = () => {
   let (username, setUsername) = React.useState(_ => "");
   let (password, setPassword) = React.useState(_ => "");
+  let (isClicked, setIsClicked) = React.useState(_ => false);
+
   @JSX
   list{
     <h1 className="centerText"> {React.string("Log into your account or sign up")} </h1>,
@@ -23,11 +25,7 @@ let make = () => {
          let value = ReactEvent.Form.target(event)["value"];
          setPassword(value) 
         }}/>
-        <input type_="submit" value="Login" onClick={e => { 
-           let value = ReactEvent.Form.target(e)["value"]
-          //DatabaseFunctions.getUserByName(username) 
-          
-          }} 
+        <input type_="submit" value="Login" onClick={(e) => ReasonReactRouter.push("/authentication?username=" ++ username ++ "&password=" ++ password)}
           />
       </form>
     </div>,
