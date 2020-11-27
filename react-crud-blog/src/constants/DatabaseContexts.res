@@ -1,0 +1,1 @@
+type message = array<{"id": int, "message1": string, "authorId": int }>

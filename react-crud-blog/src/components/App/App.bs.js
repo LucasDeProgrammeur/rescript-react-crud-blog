@@ -6,6 +6,7 @@ var Header$ReactCrudBlog = require("../Header/Header.bs.js");
 var MainContent$ReactCrudBlog = require("../MainContent/MainContent.bs.js");
 var LoginContent$ReactCrudBlog = require("../LoginContent/LoginContent.bs.js");
 var Authentication$ReactCrudBlog = require("../Authentication/Authentication.bs.js");
+var FetchedDogPictures$ReactCrudBlog = require("../FetchedDogPictures/FetchedDogPictures.bs.js");
 
 function App(Props) {
   var url = ReasonReactRouter.useUrl(undefined, undefined);
@@ -19,6 +20,13 @@ function App(Props) {
             exit = 1;
           } else {
             tmp = React.createElement(Authentication$ReactCrudBlog.make, {});
+          }
+          break;
+      case "fetchDogPictures" :
+          if (match.tl) {
+            exit = 1;
+          } else {
+            tmp = React.createElement(FetchedDogPictures$ReactCrudBlog.make, {});
           }
           break;
       case "home" :

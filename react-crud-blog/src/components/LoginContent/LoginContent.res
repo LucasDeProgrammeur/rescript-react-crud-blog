@@ -8,7 +8,6 @@ type event = {
 let make = () => {
   let (username, setUsername) = React.useState(_ => "");
   let (password, setPassword) = React.useState(_ => "");
-  let (isClicked, setIsClicked) = React.useState(_ => false);
 
   @JSX
   list{
@@ -25,7 +24,7 @@ let make = () => {
          let value = ReactEvent.Form.target(event)["value"];
          setPassword(value) 
         }}/>
-        <input type_="submit" value="Login" onClick={(e) => ReasonReactRouter.push("/authentication?username=" ++ username ++ "&password=" ++ password)}
+        <input type_="submit" value="Login" onClick={(_) => ReasonReactRouter.push("/authentication?username=" ++ username ++ "&password=" ++ password)}
           />
       </form>
     </div>,

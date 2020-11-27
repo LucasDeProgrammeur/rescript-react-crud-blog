@@ -4,10 +4,9 @@ var React = require("react");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 
 function AccountButton(Props) {
-  ReasonReactRouter.useUrl(undefined, undefined);
   return React.createElement("button", {
               className: "accountButton",
-              onClick: (function (e) {
+              onClick: (function (param) {
                   return ReasonReactRouter.push("/login");
                 })
             }, "Login");

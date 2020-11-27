@@ -15,9 +15,6 @@ function LoginContent(Props) {
       });
   var setPassword = match$1[1];
   var password = match$1[0];
-  React.useState(function () {
-        return false;
-      });
   return React.createElement(React.Fragment, undefined, React.createElement("h1", {
                   className: "centerText"
                 }, "Log into your account or sign up"), React.createElement("div", {
@@ -39,7 +36,7 @@ function LoginContent(Props) {
                         }), React.createElement("input", {
                           type: "submit",
                           value: "Login",
-                          onClick: (function (e) {
+                          onClick: (function (param) {
                               return ReasonReactRouter.push("/authentication?username=" + username + "&password=" + password);
                             })
                         }))));

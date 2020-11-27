@@ -3,17 +3,16 @@
 var React = require("react");
 
 function BlogPostCard(Props) {
-  var postContent = Props.postContent;
-  var postUser = Props.postUser;
+  var message = Props.message;
   return React.createElement("article", undefined, React.createElement("img", {
                   className: "userIcon",
                   alt: "User icon",
                   src: "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"
                 }), React.createElement("h4", {
                   className: "usernamePost"
-                }, postContent), React.createElement("p", {
+                }, "Author ID: " + String(message.authorId)), React.createElement("p", {
                   className: "postContent"
-                }, postUser));
+                }, message.message1));
 }
 
 var make = BlogPostCard;

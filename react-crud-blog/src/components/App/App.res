@@ -10,6 +10,7 @@ let make = () => {
     | list{"login"} => <LoginContent />
     | list{"home"} => <MainContent />
     | list{"authentication"} => <Authentication />
+    | list{"fetchDogPictures"} => <FetchedDogPictures />
     | _ => <MainContent />
     }}
   </>
