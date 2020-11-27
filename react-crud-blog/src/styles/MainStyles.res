@@ -8,7 +8,7 @@ let style = j`
      background-color: rgb(42, 64, 85);
      margin: 0;
      padding: 10px;
-     height: 45px;
+     height: 30px;
  }
 
 h1 {
@@ -16,9 +16,10 @@ h1 {
     margin-left: 20px;
 }
  header h1 {
-     margin: 0;
-     margin-left: 20px;
+    margin: 0;
+    margin-left: 20px;
     float: left;
+    font-size: 20px;
  }
 
  body {
@@ -83,7 +84,63 @@ h1 {
     box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.60);
 }
 
+textarea {
+    width: 80%;
+}
+
  .centerText {
      text-align: center;
+ }
+
+ .noDisplay {
+     display: none;
+ }
+
+ .backgroundFade {
+     left: 0;
+     top: 0;
+     opacity: 0.6;
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     background-color: rgb(0, 0, 0);
+ }
+
+ .editIcon {
+     width: 32px;
+     float: right;
+     cursor: hand;
+     border-radius: 5px;
+ }
+
+ .closeButton {
+    width: 25px;
+    float: right;
+    padding: 10px;
+    display: inline-block;
+ }
+
+ .modal {
+    position: absolute;
+    left: calc(50% - 250px);
+    top: calc(50vh - 150px);
+    width: 500px;
+    height: 300px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.60);
+    text-align: center;
+ }
+
+ .modal button {
+     display: block;
+     margin: 0 auto;
+     width: 80%;
+ }
+
+
+
+ .editIcon:hover {
+     background-color: rgb(230, 230, 230);
  }
 `;

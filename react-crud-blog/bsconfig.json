@@ -13,10 +13,12 @@
     "in-source": true
   }],
   "suffix": ".bs.js",
-  "namespace": true,
   "bs-dependencies": [
     "reason-react",
     "@jsiebern/bs-material-ui"
   ],
+  "warnings": {
+    "error" : "+101"
+  },
   "refmt": 3
 }

@@ -1,16 +1,16 @@
 'use strict';
 
+var App = require("./components/App/App.bs.js");
 var React = require("react");
 var ReactDom = require("react-dom");
-var App$ReactCrudBlog = require("./components/App/App.bs.js");
-var ExampleStyles$ReactCrudBlog = require("./styles/ExampleStyles.bs.js");
-var DatabaseFunctions$ReactCrudBlog = require("./backend/DatabaseFunctions.bs.js");
+var MainStyles = require("./styles/MainStyles.bs.js");
+var DatabaseFunctions = require("./backend/DatabaseFunctions.bs.js");
 
 var style = document.createElement("style");
 
 document.head.appendChild(style);
 
-style.innerHTML = ExampleStyles$ReactCrudBlog.style;
+style.innerHTML = MainStyles.style;
 
 function makeContainer(param) {
   var container = document.createElement("div");
@@ -26,15 +26,15 @@ function makeContainer(param) {
   return content;
 }
 
-console.log(DatabaseFunctions$ReactCrudBlog.getSpecificUser(1));
+console.log(DatabaseFunctions.getSpecificUser(1));
 
 var getUsers = new Promise((function (resolve, reject) {
-        return resolve((console.log(JSON.stringify(DatabaseFunctions$ReactCrudBlog.getSpecificUser(1))), undefined));
+        return resolve((console.log(JSON.stringify(DatabaseFunctions.getSpecificUser(1))), undefined));
       }));
 
 makeContainer(undefined);
 
-ReactDom.render(React.createElement(App$ReactCrudBlog.make, {}), document.getElementById("containerContent"));
+ReactDom.render(React.createElement(App.make, {}), document.getElementById("containerContent"));
 
 exports.style = style;
 exports.makeContainer = makeContainer;

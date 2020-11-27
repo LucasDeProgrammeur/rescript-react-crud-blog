@@ -35,7 +35,7 @@ let make = () => {
   <main>
       {switch state {
     | ErrorLoadingMessages => React.string("An error occurred!")
-    | LoadingMessages => React.string("Loading...")
+    | LoadingMessages => <LoadAnimation />
     | LoadedMessages(messages) => messages->Belt.Array.mapWithIndex((i, x) => <BlogPostCard key={string_of_int(i)} message={x} />)->React.array
     }}
   </main>

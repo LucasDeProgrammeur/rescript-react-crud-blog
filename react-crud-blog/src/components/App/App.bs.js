@@ -1,12 +1,12 @@
 'use strict';
 
 var React = require("react");
+var Header = require("../Header/Header.bs.js");
+var MainContent = require("../MainContent/MainContent.bs.js");
+var LoginContent = require("../LoginContent/LoginContent.bs.js");
+var Authentication = require("../Authentication/Authentication.bs.js");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
-var Header$ReactCrudBlog = require("../Header/Header.bs.js");
-var MainContent$ReactCrudBlog = require("../MainContent/MainContent.bs.js");
-var LoginContent$ReactCrudBlog = require("../LoginContent/LoginContent.bs.js");
-var Authentication$ReactCrudBlog = require("../Authentication/Authentication.bs.js");
-var FetchedDogPictures$ReactCrudBlog = require("../FetchedDogPictures/FetchedDogPictures.bs.js");
+var FetchedDogPictures = require("../FetchedDogPictures/FetchedDogPictures.bs.js");
 
 function App(Props) {
   var url = ReasonReactRouter.useUrl(undefined, undefined);
@@ -19,28 +19,28 @@ function App(Props) {
           if (match.tl) {
             exit = 1;
           } else {
-            tmp = React.createElement(Authentication$ReactCrudBlog.make, {});
+            tmp = React.createElement(Authentication.make, {});
           }
           break;
       case "fetchDogPictures" :
           if (match.tl) {
             exit = 1;
           } else {
-            tmp = React.createElement(FetchedDogPictures$ReactCrudBlog.make, {});
+            tmp = React.createElement(FetchedDogPictures.make, {});
           }
           break;
       case "home" :
           if (match.tl) {
             exit = 1;
           } else {
-            tmp = React.createElement(MainContent$ReactCrudBlog.make, {});
+            tmp = React.createElement(MainContent.make, {});
           }
           break;
       case "login" :
           if (match.tl) {
             exit = 1;
           } else {
-            tmp = React.createElement(LoginContent$ReactCrudBlog.make, {});
+            tmp = React.createElement(LoginContent.make, {});
           }
           break;
       default:
@@ -50,9 +50,9 @@ function App(Props) {
     exit = 1;
   }
   if (exit === 1) {
-    tmp = React.createElement(MainContent$ReactCrudBlog.make, {});
+    tmp = React.createElement(MainContent.make, {});
   }
-  return React.createElement(React.Fragment, undefined, React.createElement(Header$ReactCrudBlog.make, {}), tmp);
+  return React.createElement(React.Fragment, undefined, React.createElement(Header.make, {}), tmp);
 }
 
 var make = App;

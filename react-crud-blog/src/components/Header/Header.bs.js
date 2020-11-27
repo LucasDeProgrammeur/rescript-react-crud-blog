@@ -1,10 +1,10 @@
 'use strict';
 
 var React = require("react");
-var AccountButton$ReactCrudBlog = require("../AccountButton/AccountButton.bs.js");
+var AccountButton = require("../AccountButton/AccountButton.bs.js");
 
 function Header(Props) {
-  return React.createElement("header", undefined, React.createElement("h1", undefined, "Rescript+React+MaterialUI blog"), React.createElement(AccountButton$ReactCrudBlog.make, {}));
+  return React.createElement("header", undefined, React.createElement("h1", undefined, "Rescript+React blog"), React.createElement(AccountButton.make, {}));
 }
 
 var make = Header;

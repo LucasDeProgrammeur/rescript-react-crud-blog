@@ -3,7 +3,8 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
-var BlogPostCard$ReactCrudBlog = require("../BlogPostCard/BlogPostCard.bs.js");
+var BlogPostCard = require("../BlogPostCard/BlogPostCard.bs.js");
+var LoadAnimation = require("../LoadAnimation/LoadAnimation.bs.js");
 
 function MainContent(Props) {
   var match = React.useState(function () {
@@ -31,9 +32,9 @@ function MainContent(Props) {
           
         }), []);
   return React.createElement("main", undefined, typeof state === "number" ? (
-                state !== 0 ? "An error occurred!" : "Loading..."
+                state !== 0 ? "An error occurred!" : React.createElement(LoadAnimation.make, {})
               ) : Belt_Array.mapWithIndex(state._0, (function (i, x) {
-                      return React.createElement(BlogPostCard$ReactCrudBlog.make, {
+                      return React.createElement(BlogPostCard.make, {
                                   message: x,
                                   key: String(i)
                                 });

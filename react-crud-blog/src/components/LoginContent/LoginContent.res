@@ -4,6 +4,8 @@ type event = {
     "value": string
   }
 }
+
+
 @react.component
 let make = () => {
   let (username, setUsername) = React.useState(_ => "");
@@ -24,7 +26,7 @@ let make = () => {
          let value = ReactEvent.Form.target(event)["value"];
          setPassword(value) 
         }}/>
-        <input type_="submit" value="Login" onClick={(_) => ReasonReactRouter.push("/authentication?username=" ++ username ++ "&password=" ++ password)}
+        <input type_="submit" value="Login"
           />
       </form>
     </div>,
