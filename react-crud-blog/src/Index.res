@@ -11,7 +11,7 @@
 // time through the examples later.
 let style = document["createElement"]("style")
 document["head"]["appendChild"](style)
-style["innerHTML"] = MainStyles.style
+style["innerHTML"] = MainStyles.style ++ Snackbar.style
 
 let makeContainer = () => {
   let container = document["createElement"]("div")

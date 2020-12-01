@@ -1,7 +1,12 @@
 'use strict';
 
 var React = require("react");
+var LoginStates = require("../../constants/LoginStates.bs.js");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
+
+var match = LoginStates.authenticated.contents;
+
+var value = match ? "Logged on" : "Login";
 
 function AccountButton(Props) {
   return React.createElement("button", {
@@ -9,10 +14,11 @@ function AccountButton(Props) {
               onClick: (function (param) {
                   return ReasonReactRouter.push("/login");
                 })
-            }, "Login");
+            }, value);
 }
 
 var make = AccountButton;
 
+exports.value = value;
 exports.make = make;
 /* react Not a pure module */

@@ -10,10 +10,9 @@ type event = {
 let make = () => {
   let (username, setUsername) = React.useState(_ => "");
   let (password, setPassword) = React.useState(_ => "");
+<>
 
-  @JSX
-  list{
-    <h1 className="centerText"> {React.string("Log into your account or sign up")} </h1>,
+    <h1 className="centerText"> {React.string("Log into your account or sign up")} </h1>
     <div className="loginBox">
       <form method="post">
         <label> {React.string("Username")} </label>
@@ -26,9 +25,8 @@ let make = () => {
          let value = ReactEvent.Form.target(event)["value"];
          setPassword(value) 
         }}/>
-        <input type_="submit" value="Login"
-          />
+        <button onClick={_ => DatabaseFunctions.handleLogin(username, password)}>{React.string("Login")}</button>
       </form>
-    </div>,
-  }
+    </div>
+</>
 }

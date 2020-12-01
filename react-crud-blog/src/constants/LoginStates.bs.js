@@ -5,5 +5,7 @@ var authenticated = {
   contents: /* LoggedOut */0
 };
 
+console.log(authenticated.contents);
+
 exports.authenticated = authenticated;
-/* No side effect */
+/*  Not a pure module */

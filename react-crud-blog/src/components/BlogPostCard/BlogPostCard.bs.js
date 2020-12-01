@@ -4,9 +4,11 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var EditPostModal = require("../EditPostModal/EditPostModal.bs.js");
 var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
+var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 
 function BlogPostCard(Props) {
   var message = Props.message;
+  var setBlogPostStates = Props.setBlogPostStates;
   var match = React.useState(function () {
         return /* LoadingUsername */0;
       });
@@ -25,6 +27,12 @@ function BlogPostCard(Props) {
         }), []);
   return React.createElement("article", undefined, React.createElement("img", {
                   className: "editIcon",
+                  src: "https://image.flaticon.com/icons/png/512/61/61848.png",
+                  onClick: (function (param) {
+                      return DatabaseFunctions.deleteMessage(message.id);
+                    })
+                }), React.createElement("img", {
+                  className: "editIcon",
                   src: "https://simpleicon.com/wp-content/uploads/pencil-256x256.png",
                   onClick: (function (param) {
                       return Curry._1(setIsOpen, (function (_previousState) {
@@ -36,15 +44,19 @@ function BlogPostCard(Props) {
                   alt: "User icon",
                   src: "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"
                 }), React.createElement(EditPostModal.make, {
-                  message: message.message1,
+                  message: message,
                   isOpen: match$1[0],
+                  setPostStates: setBlogPostStates,
                   setIsOpen: (function (newState) {
                       return Curry._1(setIsOpen, (function (param) {
                                     return newState;
                                   }));
                     })
                 }), React.createElement("h4", {
-                  className: "usernamePost"
+                  className: "usernamePost",
+                  onClick: (function (param) {
+                      return ReasonReactRouter.push("/profile/" + String(message.authorId));
+                    })
                 }, typeof state === "number" ? (
                     state !== 0 ? "An error occurred" : "Loading"
                   ) : state._0.username), React.createElement("p", {

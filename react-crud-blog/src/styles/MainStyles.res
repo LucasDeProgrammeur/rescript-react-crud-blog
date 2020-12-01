@@ -15,6 +15,7 @@ h1 {
     color: white;
     margin-left: 20px;
 }
+
  header h1 {
     margin: 0;
     margin-left: 20px;
@@ -26,6 +27,7 @@ h1 {
      margin: 0;
      font-family: 'Open Sans', sans-serif;
      background-color: rgb(32, 54, 75);
+     color: white;
  }
 
  main {
@@ -42,6 +44,7 @@ h1 {
      width: 70%;
      margin: 20px auto;
      height: 300px;
+     color: black;
  }
 
  .userIcon {
@@ -76,6 +79,7 @@ h1 {
  }
 
 .loginBox {
+    color: black;
     background-color: white;
     border-radius: 5px;
     width: 400px;
@@ -104,6 +108,7 @@ textarea {
      width: 100%;
      height: 100%;
      background-color: rgb(0, 0, 0);
+     z-index: 0;
  }
 
  .editIcon {
@@ -138,7 +143,23 @@ textarea {
      width: 80%;
  }
 
+.addMessageContainer {
+    height: 150px;
+    width: 100%;
+    background-color: rgb(32, 54, 75);'
+    margin: 0 auto;
+}
 
+.messageContainer {
+    width: 80%;
+    height: 100px;
+    resize: none;
+    margin: 20px;
+}
+
+.sendMessageButton {
+    float: right;
+}
 
  .editIcon:hover {
      background-color: rgb(230, 230, 230);

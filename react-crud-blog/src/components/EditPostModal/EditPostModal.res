@@ -1,7 +1,9 @@
 type divClassName = string
 
 @react.component
-let make = (~message, ~isOpen, ~setIsOpen) => {
+let make = (~message, ~isOpen, ~setPostStates, ~setIsOpen) => {
+  Js.log(message)
+  let (newMessage, setNewMessage) = React.useState(_ => message)
   isOpen
     ? <>
         <div className={"backgroundFade"} />
@@ -12,8 +14,20 @@ let make = (~message, ~isOpen, ~setIsOpen) => {
             src="https://image.flaticon.com/icons/png/128/1828/1828774.png"
           />
           <h2> {React.string("Edit message")} </h2>
-          <textarea>{React.string(message)}</textarea>
-          <button>{React.string("Update")}</button>
+          <textarea 
+          value={newMessage["message1"]}
+          onChange={(e) => {
+            let newValue = ReactEvent.Form.target(e)["value"]
+         
+            setNewMessage(_ => {"id": newMessage["id"], "message1": newValue, "authorId": newMessage["authorId"]})
+          }}></textarea>
+          <button 
+          onClick={(_) => { 
+
+            DatabaseFunctions.updateMessage(message["id"], message["authorId"], message, newMessage["message1"], setPostStates)
+            
+            }}
+            >{React.string("Update")}</button>
         </div>
       </>
     : <div className={"noDisplay"} />

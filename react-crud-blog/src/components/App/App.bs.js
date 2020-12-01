@@ -3,6 +3,7 @@
 var React = require("react");
 var Header = require("../Header/Header.bs.js");
 var MainContent = require("../MainContent/MainContent.bs.js");
+var UserProfile = require("../UserProfile/UserProfile.bs.js");
 var LoginContent = require("../LoginContent/LoginContent.bs.js");
 var Authentication = require("../Authentication/Authentication.bs.js");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
@@ -41,6 +42,16 @@ function App(Props) {
             exit = 1;
           } else {
             tmp = React.createElement(LoginContent.make, {});
+          }
+          break;
+      case "profile" :
+          var match$1 = match.tl;
+          if (match$1 && !match$1.tl) {
+            tmp = React.createElement(UserProfile.make, {
+                  profileId: match$1.hd
+                });
+          } else {
+            exit = 1;
           }
           break;
       default:

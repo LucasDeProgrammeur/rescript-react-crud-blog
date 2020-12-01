@@ -2,6 +2,7 @@
 
 var App = require("./components/App/App.bs.js");
 var React = require("react");
+var Snackbar = require("./styles/Snackbar.bs.js");
 var ReactDom = require("react-dom");
 var MainStyles = require("./styles/MainStyles.bs.js");
 var DatabaseFunctions = require("./backend/DatabaseFunctions.bs.js");
@@ -10,7 +11,7 @@ var style = document.createElement("style");
 
 document.head.appendChild(style);
 
-style.innerHTML = MainStyles.style;
+style.innerHTML = MainStyles.style + Snackbar.style;
 
 function makeContainer(param) {
   var container = document.createElement("div");
