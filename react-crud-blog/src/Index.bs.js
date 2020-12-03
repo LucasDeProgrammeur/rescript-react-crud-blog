@@ -27,8 +27,6 @@ function makeContainer(param) {
   return content;
 }
 
-console.log(DatabaseFunctions.getSpecificUser(1));
-
 var getUsers = new Promise((function (resolve, reject) {
         return resolve((console.log(JSON.stringify(DatabaseFunctions.getSpecificUser(1))), undefined));
       }));

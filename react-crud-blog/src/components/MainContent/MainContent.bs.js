@@ -27,7 +27,6 @@ function MainContent(Props) {
           fetch("https://localhost:44304/api/Messages/").then(function (response) {
                     return response.json();
                   }).then(function (jsonResponse) {
-                  console.log(jsonResponse);
                   Curry._1(setState, (function (_previousState) {
                           return /* LoadedMessages */{
                                   _0: jsonResponse
@@ -65,7 +64,7 @@ function MainContent(Props) {
                 RE_EXN_ID: "Match_failure",
                 _1: [
                   "MainContent.res",
-                  69,
+                  68,
                   10
                 ],
                 Error: new Error()
@@ -101,7 +100,7 @@ function MainContent(Props) {
                                 RE_EXN_ID: "Match_failure",
                                 _1: [
                                   "MainContent.res",
-                                  40,
+                                  39,
                                   8
                                 ],
                                 Error: new Error()

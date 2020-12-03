@@ -11,7 +11,6 @@ let make = (~profileId) => {
       fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
       |> then_(response => response["json"]())
       |> then_(jsonResponse => {
-        Js.log(jsonResponse)
         setUserDetails(_previousState => LoadingStates.LoadedUserDetails(
           jsonResponse,
         ))

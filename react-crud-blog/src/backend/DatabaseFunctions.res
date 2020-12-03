@@ -22,7 +22,6 @@ let getSpecificUser = id => {
   fetch("https://localhost:44304/api/Users/" ++ string_of_int(id))
   |> then_(response => response["json"]())
   |> then_(jsonResponse => {
-    Js.log(jsonResponse)
     Js.Promise.resolve(jsonResponse)
   })
   |> then_(response => {
@@ -44,7 +43,6 @@ let handleLogin = (username: string, password: string) => {
   )
   |> Js.Promise.then_(response => response["json"]())
   |> Js.Promise.then_(jsonResponse => {
-    Js.log(jsonResponse)
     LoginStates.authenticated.contents = LoginStates.LoggedIn({
       userId: jsonResponse["id"],
     })
@@ -90,7 +88,6 @@ let sendMessage = (message, authorId) => {
   )
   |> then_(response => response["json"]())
       |> then_(jsonResponse => {
-        Js.log(jsonResponse)
         showSnackbar("Your new message has been posted!")
         Js.Promise.resolve(jsonResponse)
       })
@@ -116,7 +113,6 @@ let deleteMessage = (id) => {
   )
   |> then_(response => response["json"]())
       |> then_(jsonResponse => {
-        Js.log(jsonResponse)
         showSnackbar("Your message has been deleted")
         Js.Promise.resolve(jsonResponse)
       })
@@ -131,7 +127,6 @@ let getUserDetailsById = (profileId, setUserDetails: () => LoadingStates.userDet
       fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
       |> then_(response => response["json"]())
       |> then_(jsonResponse => {
-        Js.log(jsonResponse)
         Js.Promise.resolve(jsonResponse)
       })
       |> catch(_err => {
@@ -141,7 +136,6 @@ let getUserDetailsById = (profileId, setUserDetails: () => LoadingStates.userDet
 }
 
 let updateMessage = (id, authorId, oldMessage, newMessage, setPostStates: 'a => unit) => {
-  Js.log(newMessage)
   open Js.Promise
   fetch2(
     "https://localhost:44304/api/Messages/" ++ id,
@@ -164,7 +158,6 @@ let updateMessage = (id, authorId, oldMessage, newMessage, setPostStates: 'a => 
     Js.Promise.resolve(response)
   })
   |> catch(_err => {
-    Js.log("There was an error ")
     showSnackbar("Whoops, something went wrong")
     Js.Promise.resolve(oldMessage)
   })

@@ -2,7 +2,6 @@ type divClassName = string
 
 @react.component
 let make = (~message, ~isOpen, ~setPostStates, ~setIsOpen) => {
-  Js.log(message)
   let (newMessage, setNewMessage) = React.useState(_ => message)
   isOpen
     ? <>

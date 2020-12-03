@@ -31,7 +31,6 @@ let makeContainer = () => {
   content
 };
 
-Js.log(DatabaseFunctions.getSpecificUser(1))
 
 let getUsers = Js.Promise.make((~resolve, ~reject) => resolve(., Js.log(Js.Json.stringifyAny(DatabaseFunctions.getSpecificUser(1)))))
 

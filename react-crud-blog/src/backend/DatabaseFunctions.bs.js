@@ -16,7 +16,6 @@ function getSpecificUser(id) {
   fetch("https://localhost:44304/api/Users/" + String(id)).then(function (response) {
               return response.json();
             }).then(function (jsonResponse) {
-            console.log(jsonResponse);
             return Promise.resolve(jsonResponse);
           }).then(function (response) {
           return response;
@@ -30,7 +29,6 @@ function handleLogin(username, password) {
   fetch("https://localhost:44304/api/Users/authenticate?username=" + username + "&password=" + password).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          console.log(jsonResponse);
           LoginStates.authenticated.contents = /* LoggedIn */{
             userId: jsonResponse.id
           };
@@ -74,7 +72,6 @@ function sendMessage(message, authorId) {
             }).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          console.log(jsonResponse);
           Snackbar.show("Your new message has been posted!");
           return Promise.resolve(jsonResponse);
         }).catch(function (_err) {
@@ -99,7 +96,6 @@ function deleteMessage(id) {
             }).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          console.log(jsonResponse);
           Snackbar.show("Your message has been deleted");
           return Promise.resolve(jsonResponse);
         }).catch(function (_err) {
@@ -112,7 +108,6 @@ function getUserDetailsById(profileId, setUserDetails) {
   fetch("https://localhost:44304/api/UserDetails/" + profileId).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          console.log(jsonResponse);
           return Promise.resolve(jsonResponse);
         }).catch(function (_err) {
         return Promise.resolve(_err);
@@ -121,7 +116,6 @@ function getUserDetailsById(profileId, setUserDetails) {
 }
 
 function updateMessage(id, authorId, oldMessage, newMessage, setPostStates) {
-  console.log(newMessage);
   fetch("https://localhost:44304/api/Messages/" + id, {
               method: "PUT",
               headers: {
@@ -142,7 +136,6 @@ function updateMessage(id, authorId, oldMessage, newMessage, setPostStates) {
           Snackbar.show("This message has been updated! Refresh to see changes");
           return Promise.resolve(response);
         }).catch(function (_err) {
-        console.log("There was an error ");
         Snackbar.show("Whoops, something went wrong");
         return Promise.resolve(oldMessage);
       });

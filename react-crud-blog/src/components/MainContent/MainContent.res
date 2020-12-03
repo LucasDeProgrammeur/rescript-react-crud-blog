@@ -18,7 +18,6 @@ let make = () => {
       fetch("https://localhost:44304/api/Messages/")
       |> then_(response => response["json"]())
       |> then_(jsonResponse => {
-        Js.log(jsonResponse)
         setState(_previousState => LoadedMessages(jsonResponse))
         Js.Promise.resolve()
       })

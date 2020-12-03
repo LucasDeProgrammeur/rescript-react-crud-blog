@@ -15,7 +15,6 @@ function UserProfile(Props) {
           fetch("https://localhost:44304/api/UserDetails/" + profileId).then(function (response) {
                     return response.json();
                   }).then(function (jsonResponse) {
-                  console.log(jsonResponse);
                   Curry._1(setUserDetails, (function (_previousState) {
                           return /* LoadedUserDetails */{
                                   _0: jsonResponse

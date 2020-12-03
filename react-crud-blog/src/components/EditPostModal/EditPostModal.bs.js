@@ -9,7 +9,6 @@ function EditPostModal(Props) {
   var isOpen = Props.isOpen;
   var setPostStates = Props.setPostStates;
   var setIsOpen = Props.setIsOpen;
-  console.log(message);
   var match = React.useState(function () {
         return message;
       });
