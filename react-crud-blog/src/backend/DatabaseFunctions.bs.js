@@ -1,6 +1,7 @@
 'use strict';
 
 var Curry = require("bs-platform/lib/js/curry.js");
+var Cookies = require("../storageFunctions/Cookies.bs.js");
 var Snackbar = require("snackbar");
 var LoginStates = require("../constants/LoginStates.bs.js");
 
@@ -32,10 +33,14 @@ function handleLogin(username, password) {
           LoginStates.authenticated.contents = /* LoggedIn */{
             userId: jsonResponse.id
           };
-          return Promise.resolve(undefined);
+          Cookies.setCookie("userId", jsonResponse.id, 2);
+          Snackbar.show("You have logged in!");
+          return Promise.resolve(jsonResponse.id);
         }).catch(function (_err) {
         LoginStates.authenticated.contents = /* LoggedOut */0;
-        return Promise.resolve(undefined);
+        Snackbar.show("Whoops, something went wrong");
+        console.log("Failure!!", _err);
+        return Promise.resolve("error");
       });
   
 }

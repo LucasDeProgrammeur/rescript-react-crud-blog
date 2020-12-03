@@ -4,21 +4,28 @@ let reasonReactBlue = "#48a9dc";
 // This allows us to conveniently write CSS, together with variables, by
 // constructing a string
 let style = j`
+/*Main styles for website */
  header {
      background-color: rgb(42, 64, 85);
      margin: 0;
      padding: 10px;
      height: 30px;
+     display: flex;
+     justify-content: space-between;
  }
 
+ .searchBox {
+     width: 300px;
+     font-size: 20px;
+ }
+
+ 
 h1 {
     color: white;
-    margin-left: 20px;
 }
 
  header h1 {
     margin: 0;
-    margin-left: 20px;
     float: left;
     font-size: 20px;
  }
@@ -47,6 +54,7 @@ h1 {
      color: black;
  }
 
+/*Blogpost styling*/
  .userIcon {
      width: 48px;
      margin: 20px;
@@ -55,6 +63,14 @@ h1 {
      display: inline-block;
      float: left;
  }
+
+ .editIcon {
+     width: 32px;
+     float: right;
+     cursor: hand;
+     border-radius: 5px;
+ }
+
  .usernamePost {
      margin: 20px;
      padding-top: 10px;
@@ -71,6 +87,7 @@ h1 {
      height: 100%;
  }
 
+/*Login box styling*/
  .loginBox form input,  .loginBox form label {
      display: block;
      width: 80%;
@@ -109,13 +126,6 @@ textarea {
      height: 100%;
      background-color: rgb(0, 0, 0);
      z-index: 0;
- }
-
- .editIcon {
-     width: 32px;
-     float: right;
-     cursor: hand;
-     border-radius: 5px;
  }
 
  .closeButton {

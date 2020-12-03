@@ -34,7 +34,9 @@ function UserProfile(Props) {
     tmp = userDetails !== 0 ? React.createElement("p", undefined, "An error has occured loading this user profile") : React.createElement(LoadAnimation.make, {});
   } else {
     var userDetails$1 = userDetails._0;
-    tmp = React.createElement(React.Fragment, undefined, React.createElement("h1", undefined, "User details of: " + userDetails$1.profileName + ", " + String(userDetails$1.followers) + " followers."), React.createElement("h4", undefined, userDetails$1.bio));
+    tmp = React.createElement(React.Fragment, undefined, React.createElement("h1", undefined, "User details of: " + userDetails$1.profileName + ", " + String(userDetails$1.followers) + " followers."), React.createElement("article", {
+              className: "bio"
+            }, userDetails$1.bio));
   }
   return React.createElement(React.Fragment, undefined, tmp);
 }

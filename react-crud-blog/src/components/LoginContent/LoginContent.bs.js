@@ -19,25 +19,23 @@ function LoginContent(Props) {
                   className: "centerText"
                 }, "Log into your account or sign up"), React.createElement("div", {
                   className: "loginBox"
-                }, React.createElement("form", {
-                      method: "post"
-                    }, React.createElement("label", undefined, "Username"), React.createElement("input", {
-                          name: "username",
-                          type: "text",
-                          onChange: (function ($$event) {
-                              return Curry._1(setUsername, $$event.target.value);
-                            })
-                        }), React.createElement("label", undefined, "Password"), React.createElement("input", {
-                          name: "password",
-                          type: "password",
-                          onChange: (function ($$event) {
-                              return Curry._1(setPassword, $$event.target.value);
-                            })
-                        }), React.createElement("button", {
-                          onClick: (function (param) {
-                              return DatabaseFunctions.handleLogin(username, password);
-                            })
-                        }, "Login"))));
+                }, React.createElement("label", undefined, "Username"), React.createElement("input", {
+                      name: "username",
+                      type: "text",
+                      onChange: (function ($$event) {
+                          return Curry._1(setUsername, $$event.target.value);
+                        })
+                    }), React.createElement("label", undefined, "Password"), React.createElement("input", {
+                      name: "password",
+                      type: "password",
+                      onChange: (function ($$event) {
+                          return Curry._1(setPassword, $$event.target.value);
+                        })
+                    }), React.createElement("button", {
+                      onClick: (function (param) {
+                          return DatabaseFunctions.handleLogin(username, password);
+                        })
+                    }, "Login")));
 }
 
 var make = LoginContent;

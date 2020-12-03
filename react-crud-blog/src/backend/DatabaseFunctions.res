@@ -9,7 +9,9 @@
 
 @bs.module("snackbar") external showSnackbar: string => unit = "show"
 
+@bs.new @bs.module("session-keystore") external sessionKeyStore: Js.t<'a> = "" 
 
+@bs.val @bs.scope("localStorage") external setItem: (string, string) => unit = "setItem"
 
 let username = ref("username")
 let password = ref("password")
@@ -43,14 +45,20 @@ let handleLogin = (username: string, password: string) => {
   )
   |> Js.Promise.then_(response => response["json"]())
   |> Js.Promise.then_(jsonResponse => {
+
     LoginStates.authenticated.contents = LoginStates.LoggedIn({
       userId: jsonResponse["id"],
     })
-    Js.Promise.resolve()
+    Cookies.setCookie("userId", jsonResponse["id"], 2)
+    showSnackbar("You have logged in!")
+    Js.Promise.resolve(jsonResponse["id"])
   })
   |> catch(_err => {
     LoginStates.authenticated.contents = LoginStates.LoggedOut
-    Js.Promise.resolve()
+        showSnackbar("Whoops, something went wrong")
+        Js.log2("Failure!!", _err)
+         Js.Promise.resolve("error")
+
   })
   |> ignore
 }

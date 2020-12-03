@@ -14,7 +14,6 @@ let make = () => {
 
     <h1 className="centerText"> {React.string("Log into your account or sign up")} </h1>
     <div className="loginBox">
-      <form method="post">
         <label> {React.string("Username")} </label>
         <input type_="text" name="username" onChange={event => {
             let value = ReactEvent.Form.target(event)["value"];
@@ -26,7 +25,6 @@ let make = () => {
          setPassword(value) 
         }}/>
         <button onClick={_ => DatabaseFunctions.handleLogin(username, password)}>{React.string("Login")}</button>
-      </form>
     </div>
 </>
 }

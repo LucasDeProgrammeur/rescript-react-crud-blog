@@ -30,8 +30,8 @@ let makeContainer = () => {
 
   content
 };
-
-
+Cookies.setCookie("test", "test2", 2)
+  Js.log(Cookies.getCookie("test")[0] == "test2")
 let getUsers = Js.Promise.make((~resolve, ~reject) => resolve(., Js.log(Js.Json.stringifyAny(DatabaseFunctions.getSpecificUser(1)))))
 
 makeContainer()

@@ -1,10 +1,11 @@
 'use strict';
 
 var React = require("react");
+var SearchBox = require("../SearchBox/SearchBox.bs.js");
 var AccountButton = require("../AccountButton/AccountButton.bs.js");
 
 function Header(Props) {
-  return React.createElement("header", undefined, React.createElement("h1", undefined, "Rescript+React blog"), React.createElement(AccountButton.make, {}));
+  return React.createElement("header", undefined, React.createElement("h1", undefined, "Rescript+React blog"), React.createElement(SearchBox.make, {}), React.createElement(AccountButton.make, {}));
 }
 
 var make = Header;

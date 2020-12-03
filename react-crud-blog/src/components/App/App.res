@@ -11,7 +11,6 @@ let make = () => {
     | list{"home"} => <MainContent />
     | list{"profile", id} => <UserProfile profileId={id} />
     | list{"authentication"} => <Authentication />
-    | list{"fetchDogPictures"} => <FetchedDogPictures />
     | _ => <MainContent />
     }}
   </>

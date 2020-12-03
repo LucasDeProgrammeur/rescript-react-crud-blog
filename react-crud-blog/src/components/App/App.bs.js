@@ -7,7 +7,6 @@ var UserProfile = require("../UserProfile/UserProfile.bs.js");
 var LoginContent = require("../LoginContent/LoginContent.bs.js");
 var Authentication = require("../Authentication/Authentication.bs.js");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
-var FetchedDogPictures = require("../FetchedDogPictures/FetchedDogPictures.bs.js");
 
 function App(Props) {
   var url = ReasonReactRouter.useUrl(undefined, undefined);
@@ -21,13 +20,6 @@ function App(Props) {
             exit = 1;
           } else {
             tmp = React.createElement(Authentication.make, {});
-          }
-          break;
-      case "fetchDogPictures" :
-          if (match.tl) {
-            exit = 1;
-          } else {
-            tmp = React.createElement(FetchedDogPictures.make, {});
           }
           break;
       case "home" :

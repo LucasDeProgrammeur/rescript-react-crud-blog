@@ -34,7 +34,7 @@ let make = (~profileId) => {
         <h1>
           {React.string("User details of: " ++ userDetails["profileName"] ++ ", " ++ string_of_int(userDetails["followers"]) ++ " followers.")}
         </h1>
-        <h4>{React.string(userDetails["bio"])}</h4>
+        <article className="bio">{React.string(userDetails["bio"])}</article>
         
       </>
     }}
