@@ -1,7 +1,7 @@
 type divClassName = string
 
 @react.component
-let make = (~message, ~isOpen, ~setPostStates, ~setIsOpen) => {
+let make = (~message, ~isOpen, ~setIsOpen, ~currentState, ~newState) => {
   let (newMessage, setNewMessage) = React.useState(_ => message)
   isOpen
     ? <>
@@ -23,7 +23,7 @@ let make = (~message, ~isOpen, ~setPostStates, ~setIsOpen) => {
           <button 
           onClick={(_) => { 
 
-            DatabaseFunctions.updateMessage(message["id"], message["authorId"], message, newMessage["message1"], setPostStates)
+            DatabaseFunctions.updateMessage(message["id"], message["authorId"], message, newMessage["message1"], currentState, newState)
             
             }}
             >{React.string("Update")}</button>

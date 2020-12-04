@@ -8,7 +8,8 @@ var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 
 function BlogPostCard(Props) {
   var message = Props.message;
-  var setBlogPostStates = Props.setBlogPostStates;
+  var currentState = Props.currentState;
+  var newState = Props.newState;
   var match = React.useState(function () {
         return /* LoadingUsername */0;
       });
@@ -29,7 +30,7 @@ function BlogPostCard(Props) {
                   className: "editIcon",
                   src: "https://image.flaticon.com/icons/png/512/61/61848.png",
                   onClick: (function (param) {
-                      return DatabaseFunctions.deleteMessage(message.id);
+                      return DatabaseFunctions.deleteMessage(message.id, currentState, newState);
                     })
                 }), React.createElement("img", {
                   className: "editIcon",
@@ -46,12 +47,13 @@ function BlogPostCard(Props) {
                 }), React.createElement(EditPostModal.make, {
                   message: message,
                   isOpen: match$1[0],
-                  setPostStates: setBlogPostStates,
                   setIsOpen: (function (newState) {
                       return Curry._1(setIsOpen, (function (param) {
                                     return newState;
                                   }));
-                    })
+                    }),
+                  currentState: currentState,
+                  newState: newState
                 }), React.createElement("h4", {
                   className: "usernamePost",
                   onClick: (function (param) {

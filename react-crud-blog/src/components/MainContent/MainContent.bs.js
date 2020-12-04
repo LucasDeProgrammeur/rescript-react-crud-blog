@@ -28,7 +28,8 @@ function MainContent(Props) {
                     return response.json();
                   }).then(function (jsonResponse) {
                   Curry._1(setState, (function (_previousState) {
-                          return /* LoadedMessages */{
+                          return {
+                                  TAG: /* LoadedMessages */3,
                                   _0: jsonResponse
                                 };
                         }));
@@ -43,47 +44,102 @@ function MainContent(Props) {
         }), []);
   var tmp;
   if (typeof state === "number") {
-    tmp = state !== 0 ? React.createElement("p", undefined, "An error occurred! The server may be down.") : React.createElement(LoadAnimation.make, {});
+    tmp = state === /* LoadingMessages */0 ? React.createElement(LoadAnimation.make, {}) : React.createElement("p", undefined, "An error occurred! The server may be down.");
   } else {
-    var filteredMessages = Belt_Array.keepMap(state._0, (function (x) {
-            if (x.message1.toLowerCase().includes(searchQuery.toLowerCase())) {
-              return Caml_option.some(x);
-            }
+    switch (state.TAG | 0) {
+      case /* AppendingNewMessage */0 :
+          var messageList = state._1;
+          messageList.push(state._0);
+          Curry._1(setState, (function (param) {
+                  return {
+                          TAG: /* LoadedMessages */3,
+                          _0: messageList
+                        };
+                }));
+          tmp = React.createElement(LoadAnimation.make, {});
+          break;
+      case /* ProcessingMessageRemoval */1 :
+          var messages = state._1;
+          var messageId = state._0;
+          Curry._1(setState, (function (param) {
+                  return {
+                          TAG: /* LoadedMessages */3,
+                          _0: Belt_Array.keepMap(messages, (function (x) {
+                                  if (x.id === messageId) {
+                                    return ;
+                                  } else {
+                                    return Caml_option.some(x);
+                                  }
+                                }))
+                        };
+                }));
+          tmp = React.createElement(LoadAnimation.make, {});
+          break;
+      case /* ProcessingMessageUpdate */2 :
+          var messages$1 = state._2;
+          var newMessage = state._1;
+          var messageId$1 = state._0;
+          Curry._1(setState, (function (param) {
+                  return {
+                          TAG: /* LoadedMessages */3,
+                          _0: Belt_Array.keepMap(messages$1, (function (x) {
+                                  if (x.id === messageId$1) {
+                                    return {
+                                            authorId: x.authorId,
+                                            id: x.id,
+                                            message1: newMessage
+                                          };
+                                  } else {
+                                    return Caml_option.some(x);
+                                  }
+                                }))
+                        };
+                }));
+          tmp = React.createElement(LoadAnimation.make, {});
+          break;
+      case /* LoadedMessages */3 :
+          var filteredMessages = Belt_Array.keepMap(state._0, (function (x) {
+                  if (x.message1.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    return Caml_option.some(x);
+                  }
+                  
+                }));
+          var sortedMessages;
+          switch (match$1[0]) {
+            case /* ByNewest */0 :
+                sortedMessages = Belt_Array.reverse(filteredMessages);
+                break;
+            case /* ByOldest */1 :
+                sortedMessages = filteredMessages;
+                break;
+            case /* ByUsername */2 :
+                throw {
+                      RE_EXN_ID: "Match_failure",
+                      _1: [
+                        "MainContent.res",
+                        94,
+                        10
+                      ],
+                      Error: new Error()
+                    };
             
-          }));
-    var sortedMessages;
-    switch (match$1[0]) {
-      case /* ByNewest */0 :
-          sortedMessages = Belt_Array.reverse(filteredMessages);
+          }
+          tmp = Belt_Array.mapWithIndex(sortedMessages, (function (i, x) {
+                  return React.createElement(BlogPostCard.make, {
+                              message: x,
+                              currentState: state,
+                              newState: setState,
+                              key: String(i)
+                            });
+                }));
           break;
-      case /* ByOldest */1 :
-          sortedMessages = filteredMessages;
-          break;
-      case /* ByUsername */2 :
-          throw {
-                RE_EXN_ID: "Match_failure",
-                _1: [
-                  "MainContent.res",
-                  68,
-                  10
-                ],
-                Error: new Error()
-              };
       
     }
-    tmp = Belt_Array.mapWithIndex(sortedMessages, (function (i, x) {
-            return React.createElement(BlogPostCard.make, {
-                        message: x,
-                        setBlogPostStates: (function (newState) {
-                            return Curry._1(setState, (function (param) {
-                                          return newState;
-                                        }));
-                          }),
-                        key: String(i)
-                      });
-          }));
   }
-  return React.createElement("main", undefined, React.createElement(AddMessageContainer.make, {}), React.createElement("select", {
+  return React.createElement("main", undefined, React.createElement(AddMessageContainer.make, {
+                  newState: setState,
+                  currentState: state
+                }), React.createElement("select", {
                   onChange: (function (e) {
                       var selectValue = e.target.value;
                       switch (selectValue) {
@@ -100,7 +156,7 @@ function MainContent(Props) {
                                 RE_EXN_ID: "Match_failure",
                                 _1: [
                                   "MainContent.res",
-                                  39,
+                                  34,
                                   8
                                 ],
                                 Error: new Error()

@@ -1,5 +1,5 @@
 @react.component
-let make = () => {
+let make = (~newState, ~currentState) => {
   let (message, setMessage) = React.useState(_ => "")
   <div className="addMessageContainer">
     <textarea
@@ -12,6 +12,6 @@ let make = () => {
           }}
       placeholder="What's on your mind right now?"
     />
-    <button className="sendMessageButton" onClick={_ => DatabaseFunctions.sendMessage(message, 1)}> {React.string("Send")} </button>
+    <button className="sendMessageButton" onClick={_ => DatabaseFunctions.sendMessage(message, 1, newState, currentState)}> {React.string("Send")} </button>
   </div>
 }

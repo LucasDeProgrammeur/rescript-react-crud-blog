@@ -60,7 +60,7 @@ function getUserById(id, setState) {
   
 }
 
-function sendMessage(message, authorId) {
+function sendMessage(message, authorId, newState, currentState) {
   fetch("https://localhost:44304/api/Messages", {
               method: "POST",
               headers: {
@@ -78,14 +78,32 @@ function sendMessage(message, authorId) {
             return response.json();
           }).then(function (jsonResponse) {
           Snackbar.show("Your new message has been posted!");
-          return Promise.resolve(jsonResponse);
+          var exit = 0;
+          if (typeof currentState === "number" || currentState.TAG !== /* LoadedMessages */3) {
+            exit = 1;
+          } else {
+            var data = currentState._0;
+            Curry._1(newState, (function (param) {
+                    return {
+                            TAG: /* AppendingNewMessage */0,
+                            _0: jsonResponse,
+                            _1: data
+                          };
+                  }));
+          }
+          if (exit === 1) {
+            Curry._1(newState, (function (param) {
+                    return /* LoadingMessages */0;
+                  }));
+          }
+          return Promise.resolve(undefined);
         }).catch(function (_err) {
-        return Promise.resolve(_err);
+        return Promise.resolve(undefined);
       });
   
 }
 
-function deleteMessage(id) {
+function deleteMessage(id, currentState, newState) {
   fetch("https://localhost:44304/api/Messages/" + id, {
               method: "DELETE",
               headers: {
@@ -102,9 +120,27 @@ function deleteMessage(id) {
             return response.json();
           }).then(function (jsonResponse) {
           Snackbar.show("Your message has been deleted");
-          return Promise.resolve(jsonResponse);
+          var exit = 0;
+          if (typeof currentState === "number" || currentState.TAG !== /* LoadedMessages */3) {
+            exit = 1;
+          } else {
+            var data = currentState._0;
+            Curry._1(newState, (function (param) {
+                    return {
+                            TAG: /* ProcessingMessageRemoval */1,
+                            _0: jsonResponse.id,
+                            _1: data
+                          };
+                  }));
+          }
+          if (exit === 1) {
+            Curry._1(newState, (function (param) {
+                    return /* LoadingMessages */0;
+                  }));
+          }
+          return Promise.resolve(undefined);
         }).catch(function (_err) {
-        return Promise.resolve(_err);
+        return Promise.resolve(undefined);
       });
   
 }
@@ -120,7 +156,7 @@ function getUserDetailsById(profileId, setUserDetails) {
   
 }
 
-function updateMessage(id, authorId, oldMessage, newMessage, setPostStates) {
+function updateMessage(id, authorId, oldMessage, newMessage, currentState, newState) {
   fetch("https://localhost:44304/api/Messages/" + id, {
               method: "PUT",
               headers: {
@@ -138,7 +174,26 @@ function updateMessage(id, authorId, oldMessage, newMessage, setPostStates) {
             }).then(function (response) {
             return response.json();
           }).then(function (response) {
-          Snackbar.show("This message has been updated! Refresh to see changes");
+          Snackbar.show("This message has been updated!");
+          var exit = 0;
+          if (typeof currentState === "number" || currentState.TAG !== /* LoadedMessages */3) {
+            exit = 1;
+          } else {
+            var data = currentState._0;
+            Curry._1(newState, (function (param) {
+                    return {
+                            TAG: /* ProcessingMessageUpdate */2,
+                            _0: response.id,
+                            _1: newMessage,
+                            _2: data
+                          };
+                  }));
+          }
+          if (exit === 1) {
+            Curry._1(newState, (function (param) {
+                    return /* LoadingMessages */0;
+                  }));
+          }
           return Promise.resolve(response);
         }).catch(function (_err) {
         Snackbar.show("Whoops, something went wrong");

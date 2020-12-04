@@ -5,6 +5,8 @@ var React = require("react");
 var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
 
 function AddMessageContainer(Props) {
+  var newState = Props.newState;
+  var currentState = Props.currentState;
   var match = React.useState(function () {
         return "";
       });
@@ -25,7 +27,7 @@ function AddMessageContainer(Props) {
                 }), React.createElement("button", {
                   className: "sendMessageButton",
                   onClick: (function (param) {
-                      return DatabaseFunctions.sendMessage(message, 1);
+                      return DatabaseFunctions.sendMessage(message, 1, newState, currentState);
                     })
                 }, "Send"));
 }

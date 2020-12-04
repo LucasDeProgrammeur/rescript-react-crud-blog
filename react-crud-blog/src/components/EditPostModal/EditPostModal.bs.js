@@ -7,8 +7,9 @@ var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
 function EditPostModal(Props) {
   var message = Props.message;
   var isOpen = Props.isOpen;
-  var setPostStates = Props.setPostStates;
   var setIsOpen = Props.setIsOpen;
+  var currentState = Props.currentState;
+  var newState = Props.newState;
   var match = React.useState(function () {
         return message;
       });
@@ -39,7 +40,7 @@ function EditPostModal(Props) {
                           })
                       }), React.createElement("button", {
                         onClick: (function (param) {
-                            return DatabaseFunctions.updateMessage(message.id, message.authorId, message, newMessage.message1, setPostStates);
+                            return DatabaseFunctions.updateMessage(message.id, message.authorId, message, newMessage.message1, currentState, newState);
                           })
                       }, "Update")));
   } else {

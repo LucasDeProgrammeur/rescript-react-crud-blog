@@ -1,17 +1,30 @@
 @bs.val external fetch: string => Js.Promise.t<'a> = "fetch"
-@bs.val external fetch2: (
+@bs.val
+external fetch2: (
   string,
-  {"method": string, "redirect": string, "body": option<string>, "headers": { "mode": string, "Access-Control-Allow-Credentials": string, "credentials": string, "Content-Type": string}},
+  {
+    "method": string,
+    "redirect": string,
+    "body": option<string>,
+    "headers": {
+      "mode": string,
+      "Access-Control-Allow-Credentials": string,
+      "credentials": string,
+      "Content-Type": string,
+    },
+  },
 ) => Js.Promise.t<'a> = "fetch"
 
 @bs.val @bs.scope("localStorage") external getItem: string => string = "getItem"
-@bs.val @bs.scope("localStorage") external setItem: (string, string) => unit = "setItem"
+@bs.val @bs.scope("localStorage")
+external setItem: (string, string) => unit = "setItem"
 
 @bs.module("snackbar") external showSnackbar: string => unit = "show"
 
-@bs.new @bs.module("session-keystore") external sessionKeyStore: Js.t<'a> = "" 
+@bs.new @bs.module("session-keystore") external sessionKeyStore: Js.t<'a> = ""
 
-@bs.val @bs.scope("localStorage") external setItem: (string, string) => unit = "setItem"
+@bs.val @bs.scope("localStorage")
+external setItem: (string, string) => unit = "setItem"
 
 let username = ref("username")
 let password = ref("password")
@@ -45,7 +58,6 @@ let handleLogin = (username: string, password: string) => {
   )
   |> Js.Promise.then_(response => response["json"]())
   |> Js.Promise.then_(jsonResponse => {
-
     LoginStates.authenticated.contents = LoginStates.LoggedIn({
       userId: jsonResponse["id"],
     })
@@ -55,14 +67,12 @@ let handleLogin = (username: string, password: string) => {
   })
   |> catch(_err => {
     LoginStates.authenticated.contents = LoginStates.LoggedOut
-        showSnackbar("Whoops, something went wrong")
-        Js.log2("Failure!!", _err)
-         Js.Promise.resolve("error")
-
+    showSnackbar("Whoops, something went wrong")
+    Js.log2("Failure!!", _err)
+    Js.Promise.resolve("error")
   })
   |> ignore
 }
-
 
 let getUserById = (id, setState: 'a => unit) => {
   open Js.Promise
@@ -80,70 +90,94 @@ let getUserById = (id, setState: 'a => unit) => {
   None
 }
 
-let sendMessage = (message, authorId) => {
+let sendMessage = (message, authorId, newState, currentState) => {
   open Js.Promise
-  fetch2("https://localhost:44304/api/Messages", {
+  fetch2(
+    "https://localhost:44304/api/Messages",
+    {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json; charset=utf-8",
         "Access-Control-Allow-Credentials": "true",
         "mode": "no-cors",
-        "credentials": "include"
+        "credentials": "include",
       },
       "body": Js.Json.stringifyAny({"message1": message, "authorId": authorId}),
-      "redirect": "follow"
+      "redirect": "follow",
     },
   )
   |> then_(response => response["json"]())
-      |> then_(jsonResponse => {
-        showSnackbar("Your new message has been posted!")
-        Js.Promise.resolve(jsonResponse)
-      })
-      |> catch(_err => {
-        Js.Promise.resolve(_err)
-      })
-      |> ignore
+  |> then_(jsonResponse => {
+    showSnackbar("Your new message has been posted!")
+
+
+    switch currentState {
+      | LoadingStates.LoadedMessages(data) => newState(_ => LoadingStates.AppendingNewMessage(jsonResponse, data))
+      | _ => newState(_ => LoadingStates.LoadingMessages)
+    }
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
-let deleteMessage = (id) => {
+let deleteMessage = (id, currentState, newState) => {
   open Js.Promise
-  fetch2("https://localhost:44304/api/Messages/" ++ id, {
+  fetch2(
+    "https://localhost:44304/api/Messages/" ++ id,
+    {
       "method": "DELETE",
       "headers": {
         "Content-Type": "application/json; charset=utf-8",
         "Access-Control-Allow-Credentials": "true",
         "mode": "no-cors",
-        "credentials": "include"
+        "credentials": "include",
       },
       "body": Js.Json.stringifyAny({"id": id}),
-      "redirect": "follow"
+      "redirect": "follow",
     },
   )
   |> then_(response => response["json"]())
-      |> then_(jsonResponse => {
-        showSnackbar("Your message has been deleted")
-        Js.Promise.resolve(jsonResponse)
-      })
-      |> catch(_err => {
-        Js.Promise.resolve(_err)
-      })
-      |> ignore
+  |> then_(jsonResponse => {
+    showSnackbar("Your message has been deleted")
+    switch currentState {
+      | LoadingStates.LoadedMessages(data) => newState(_ => LoadingStates.ProcessingMessageRemoval(jsonResponse["id"], data))
+      | _ => newState(_ => LoadingStates.LoadingMessages)
+    }
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
-let getUserDetailsById = (profileId, setUserDetails: () => LoadingStates.userDetailsState) => {
-        open Js.Promise
-      fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
-      |> then_(response => response["json"]())
-      |> then_(jsonResponse => {
-        Js.Promise.resolve(jsonResponse)
-      })
-      |> catch(_err => {
-        Js.Promise.resolve(_err)
-      })
-      |> ignore
+let getUserDetailsById = (
+  profileId,
+  setUserDetails: unit => LoadingStates.userDetailsState,
+) => {
+  open Js.Promise
+  fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    Js.Promise.resolve(jsonResponse)
+  })
+  |> catch(_err => {
+    Js.Promise.resolve(_err)
+  })
+  |> ignore
 }
 
-let updateMessage = (id, authorId, oldMessage, newMessage, setPostStates: 'a => unit) => {
+let updateMessage = (
+  id,
+  authorId,
+  oldMessage,
+  newMessage,
+  currentState, 
+  newState
+) => {
   open Js.Promise
   fetch2(
     "https://localhost:44304/api/Messages/" ++ id,
@@ -153,16 +187,23 @@ let updateMessage = (id, authorId, oldMessage, newMessage, setPostStates: 'a => 
         "Content-Type": "application/json; charset=utf-8",
         "Access-Control-Allow-Credentials": "true",
         "mode": "no-cors",
-        "credentials": "include"
+        "credentials": "include",
       },
-      "body": Js.Json.stringifyAny({"id": id, "message1": newMessage, "authorId": oldMessage["authorId"]}),
-      "redirect": "follow"
+      "body": Js.Json.stringifyAny({
+        "id": id,
+        "message1": newMessage,
+        "authorId": oldMessage["authorId"],
+      }),
+      "redirect": "follow",
     },
   )
   |> then_(response => response["json"]())
   |> then_(response => {
-    showSnackbar("This message has been updated! Refresh to see changes")
-    // _ => setPostStates(LoadingStates.LoadingMessage)
+    showSnackbar("This message has been updated!")
+    switch currentState {
+      | LoadingStates.LoadedMessages(data) => newState(_ => LoadingStates.ProcessingMessageUpdate(response["id"], newMessage, data))
+      | _ => newState(_ => LoadingStates.LoadingMessages)
+    }
     Js.Promise.resolve(response)
   })
   |> catch(_err => {
@@ -171,5 +212,3 @@ let updateMessage = (id, authorId, oldMessage, newMessage, setPostStates: 'a => 
   })
   |> ignore
 }
-
-
