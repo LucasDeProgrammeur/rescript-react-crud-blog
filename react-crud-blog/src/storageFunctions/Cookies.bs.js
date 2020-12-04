@@ -13,8 +13,9 @@ function setCookie(cname, cvalue, exdays) {
 
 function getCookie(cname) {
   var cookieValues = document.cookie.split(";");
+  console.log(cookieValues);
   return Belt_Array.keepMap(cookieValues, (function (x) {
-                if (x.toLowerCase().includes(cname)) {
+                if (x.toLowerCase().includes(cname.toLowerCase())) {
                   return Caml_array.get(x.split("="), 1);
                 }
                 

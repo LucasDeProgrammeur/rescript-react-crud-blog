@@ -12,9 +12,9 @@ let setCookie = (cname, cvalue, exdays) => {
 let getCookie = cname => {
     
     let cookieValues = Js.String2.split(document["cookie"], ";")
-
+    Js.log(cookieValues)
     Belt.Array.keepMap(cookieValues, x => 
-          if (Js.String2.includes(Js.String2.toLowerCase(x), cname)) {
+          if (Js.String2.includes(Js.String2.toLowerCase(x), Js.String2.toLowerCase(cname))) {
             let foundValue = Js.String2.split(x, "=")[1]
             Some(foundValue)
           } else {

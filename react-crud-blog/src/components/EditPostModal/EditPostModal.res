@@ -23,7 +23,7 @@ let make = (~message, ~isOpen, ~setIsOpen, ~currentState, ~newState) => {
           <button 
           onClick={(_) => { 
 
-            DatabaseFunctions.updateMessage(message["id"], message["authorId"], message, newMessage["message1"], currentState, newState)
+            DatabaseFunctions.updateMessage(message["id"], message, newMessage["message1"], currentState, newState)
             
             }}
             >{React.string("Update")}</button>

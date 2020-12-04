@@ -2,7 +2,9 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
+var ProcessUserCookie = require("../../helpers/ProcessUserCookie.bs.js");
 
 function AddMessageContainer(Props) {
   var newState = Props.newState;
@@ -27,7 +29,7 @@ function AddMessageContainer(Props) {
                 }), React.createElement("button", {
                   className: "sendMessageButton",
                   onClick: (function (param) {
-                      return DatabaseFunctions.sendMessage(message, 1, newState, currentState);
+                      return DatabaseFunctions.sendMessage(message, Caml_format.caml_int_of_string(ProcessUserCookie.getLoggedInUserId(undefined)), newState, currentState);
                     })
                 }, "Send"));
 }

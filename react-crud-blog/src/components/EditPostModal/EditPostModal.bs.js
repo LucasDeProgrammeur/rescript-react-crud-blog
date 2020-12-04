@@ -40,7 +40,7 @@ function EditPostModal(Props) {
                           })
                       }), React.createElement("button", {
                         onClick: (function (param) {
-                            return DatabaseFunctions.updateMessage(message.id, message.authorId, message, newMessage.message1, currentState, newState);
+                            return DatabaseFunctions.updateMessage(message.id, message, newMessage.message1, currentState, newState);
                           })
                       }, "Update")));
   } else {

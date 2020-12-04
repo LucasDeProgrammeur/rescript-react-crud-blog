@@ -6,6 +6,8 @@ var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var BlogPostCard = require("../BlogPostCard/BlogPostCard.bs.js");
 var LoadAnimation = require("../LoadAnimation/LoadAnimation.bs.js");
+var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
+var ProcessUserCookie = require("../../helpers/ProcessUserCookie.bs.js");
 var AddMessageContainer = require("../AddMessageContainer/AddMessageContainer.bs.js");
 
 function MainContent(Props) {
@@ -24,23 +26,11 @@ function MainContent(Props) {
   var setSearchQuery = match$2[1];
   var searchQuery = match$2[0];
   React.useEffect((function () {
-          fetch("https://localhost:44304/api/Messages/").then(function (response) {
-                    return response.json();
-                  }).then(function (jsonResponse) {
-                  Curry._1(setState, (function (_previousState) {
-                          return {
-                                  TAG: /* LoadedMessages */3,
-                                  _0: jsonResponse
-                                };
-                        }));
-                  return Promise.resolve(undefined);
-                }).catch(function (_err) {
-                Curry._1(setState, (function (_previousState) {
-                        return /* ErrorLoadingMessages */1;
-                      }));
-                return Promise.resolve(undefined);
-              });
-          
+          return DatabaseFunctions.showMessages(function (newState) {
+                      return Curry._1(setState, (function (param) {
+                                    return newState;
+                                  }));
+                    });
         }), []);
   var tmp;
   if (typeof state === "number") {
@@ -117,7 +107,7 @@ function MainContent(Props) {
                       RE_EXN_ID: "Match_failure",
                       _1: [
                         "MainContent.res",
-                        94,
+                        80,
                         10
                       ],
                       Error: new Error()
@@ -129,6 +119,7 @@ function MainContent(Props) {
                               message: x,
                               currentState: state,
                               newState: setState,
+                              isCreator: ProcessUserCookie.getLoggedInUserId(undefined) === String(x.authorId),
                               key: String(i)
                             });
                 }));
@@ -156,7 +147,7 @@ function MainContent(Props) {
                                 RE_EXN_ID: "Match_failure",
                                 _1: [
                                   "MainContent.res",
-                                  34,
+                                  20,
                                   8
                                 ],
                                 Error: new Error()

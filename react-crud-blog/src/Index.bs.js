@@ -2,12 +2,9 @@
 
 var App = require("./components/App/App.bs.js");
 var React = require("react");
-var Cookies = require("./storageFunctions/Cookies.bs.js");
 var Snackbar = require("./styles/Snackbar.bs.js");
 var ReactDom = require("react-dom");
-var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var MainStyles = require("./styles/MainStyles.bs.js");
-var DatabaseFunctions = require("./backend/DatabaseFunctions.bs.js");
 
 var style = document.createElement("style");
 
@@ -29,19 +26,10 @@ function makeContainer(param) {
   return content;
 }
 
-Cookies.setCookie("test", "test2", 2);
-
-console.log(Caml_array.get(Cookies.getCookie("test"), 0) === "test2");
-
-var getUsers = new Promise((function (resolve, reject) {
-        return resolve((console.log(JSON.stringify(DatabaseFunctions.getSpecificUser(1))), undefined));
-      }));
-
 makeContainer(undefined);
 
 ReactDom.render(React.createElement(App.make, {}), document.getElementById("containerContent"));
 
 exports.style = style;
 exports.makeContainer = makeContainer;
-exports.getUsers = getUsers;
 /* style Not a pure module */

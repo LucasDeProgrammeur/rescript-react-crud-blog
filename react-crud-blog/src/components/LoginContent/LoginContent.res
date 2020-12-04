@@ -1,10 +1,3 @@
-@bs.val external event: string => Js.Promise.t<'a> = "event"
-type event = {
-  "target": {
-    "value": string
-  }
-}
-
 
 @react.component
 let make = () => {

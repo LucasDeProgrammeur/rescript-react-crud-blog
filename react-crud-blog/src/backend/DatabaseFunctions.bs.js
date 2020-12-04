@@ -5,14 +5,6 @@ var Cookies = require("../storageFunctions/Cookies.bs.js");
 var Snackbar = require("snackbar");
 var LoginStates = require("../constants/LoginStates.bs.js");
 
-var username = {
-  contents: "username"
-};
-
-var password = {
-  contents: "password"
-};
-
 function getSpecificUser(id) {
   fetch("https://localhost:44304/api/Users/" + String(id)).then(function (response) {
               return response.json();
@@ -22,6 +14,22 @@ function getSpecificUser(id) {
           return response;
         }).catch(function (_err) {
         return Promise.resolve(_err);
+      });
+  
+}
+
+function showMessages(newState) {
+  fetch("https://localhost:44304/api/Messages/").then(function (response) {
+            return response.json();
+          }).then(function (jsonResponse) {
+          Curry._1(newState, {
+                TAG: /* LoadedMessages */3,
+                _0: jsonResponse
+              });
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Curry._1(newState, /* ErrorLoadingMessages */1);
+        return Promise.resolve(undefined);
       });
   
 }
@@ -61,6 +69,7 @@ function getUserById(id, setState) {
 }
 
 function sendMessage(message, authorId, newState, currentState) {
+  console.log(authorId);
   fetch("https://localhost:44304/api/Messages", {
               method: "POST",
               headers: {
@@ -145,18 +154,21 @@ function deleteMessage(id, currentState, newState) {
   
 }
 
-function getUserDetailsById(profileId, setUserDetails) {
+function getUserDetailsById(profileId, setUsername) {
   fetch("https://localhost:44304/api/UserDetails/" + profileId).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          return Promise.resolve(jsonResponse);
+          Curry._1(setUsername, /* LoadedUserDetails */{
+                _0: jsonResponse
+              });
+          return Promise.resolve(undefined);
         }).catch(function (_err) {
-        return Promise.resolve(_err);
+        return Promise.resolve(undefined);
       });
   
 }
 
-function updateMessage(id, authorId, oldMessage, newMessage, currentState, newState) {
+function updateMessage(id, oldMessage, newMessage, currentState, newState) {
   fetch("https://localhost:44304/api/Messages/" + id, {
               method: "PUT",
               headers: {
@@ -202,9 +214,8 @@ function updateMessage(id, authorId, oldMessage, newMessage, currentState, newSt
   
 }
 
-exports.username = username;
-exports.password = password;
 exports.getSpecificUser = getSpecificUser;
+exports.showMessages = showMessages;
 exports.handleLogin = handleLogin;
 exports.getUserById = getUserById;
 exports.sendMessage = sendMessage;

@@ -10,6 +10,7 @@ function BlogPostCard(Props) {
   var message = Props.message;
   var currentState = Props.currentState;
   var newState = Props.newState;
+  var isCreator = Props.isCreator;
   var match = React.useState(function () {
         return /* LoadingUsername */0;
       });
@@ -26,21 +27,21 @@ function BlogPostCard(Props) {
                                     }));
                       }));
         }), []);
-  return React.createElement("article", undefined, React.createElement("img", {
-                  className: "editIcon",
-                  src: "https://image.flaticon.com/icons/png/512/61/61848.png",
-                  onClick: (function (param) {
-                      return DatabaseFunctions.deleteMessage(message.id, currentState, newState);
-                    })
-                }), React.createElement("img", {
-                  className: "editIcon",
-                  src: "https://simpleicon.com/wp-content/uploads/pencil-256x256.png",
-                  onClick: (function (param) {
-                      return Curry._1(setIsOpen, (function (_previousState) {
-                                    return true;
-                                  }));
-                    })
-                }), React.createElement("img", {
+  return React.createElement("article", undefined, isCreator ? React.createElement("img", {
+                    className: "editIcon",
+                    src: "https://image.flaticon.com/icons/png/512/61/61848.png",
+                    onClick: (function (param) {
+                        return DatabaseFunctions.deleteMessage(message.id, currentState, newState);
+                      })
+                  }) : null, isCreator ? React.createElement("img", {
+                    className: "editIcon",
+                    src: "https://simpleicon.com/wp-content/uploads/pencil-256x256.png",
+                    onClick: (function (param) {
+                        return Curry._1(setIsOpen, (function (_previousState) {
+                                      return true;
+                                    }));
+                      })
+                  }) : null, React.createElement("img", {
                   className: "userIcon",
                   alt: "User icon",
                   src: "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"

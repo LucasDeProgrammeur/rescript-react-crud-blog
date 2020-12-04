@@ -8,22 +8,8 @@ let make = () => {
   let (sorting, setSorting) = React.useState(() => SortStates.ByNewest)
   let (searchQuery, setSearchQuery) = React.useState(() => "")
   React.useEffect0(() => {
-    {
-      open Js.Promise
-      fetch("https://localhost:44304/api/Messages/")
-      |> then_(response => response["json"]())
-      |> then_(jsonResponse => {
-        setState(_previousState => LoadingStates.LoadedMessages(jsonResponse))
-        Js.Promise.resolve()
-      })
-      |> catch(_err => {
-        setState(_previousState => LoadingStates.ErrorLoadingMessages)
-        Js.Promise.resolve()
-      })
-      |> ignore
-    }
-
-    None
+    
+      DatabaseFunctions.showMessages((newState) => setState(_ => newState))
   })
 
   <main>
@@ -102,6 +88,9 @@ let make = () => {
             message={x}
             currentState={state}
             newState={setState}
+            isCreator={
+              ProcessUserCookie.getLoggedInUserId() == string_of_int(x["authorId"])
+            }
           />
         })->React.array
       }

@@ -12,6 +12,6 @@ let make = (~newState, ~currentState) => {
           }}
       placeholder="What's on your mind right now?"
     />
-    <button className="sendMessageButton" onClick={_ => DatabaseFunctions.sendMessage(message, 1, newState, currentState)}> {React.string("Send")} </button>
+    <button className="sendMessageButton" onClick={_ => DatabaseFunctions.sendMessage(message, int_of_string(ProcessUserCookie.getLoggedInUserId()), newState, currentState)}> {React.string("Send")} </button>
   </div>
 }

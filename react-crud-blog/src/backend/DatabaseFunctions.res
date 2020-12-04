@@ -15,19 +15,8 @@ external fetch2: (
   },
 ) => Js.Promise.t<'a> = "fetch"
 
-@bs.val @bs.scope("localStorage") external getItem: string => string = "getItem"
-@bs.val @bs.scope("localStorage")
-external setItem: (string, string) => unit = "setItem"
 
 @bs.module("snackbar") external showSnackbar: string => unit = "show"
-
-@bs.new @bs.module("session-keystore") external sessionKeyStore: Js.t<'a> = ""
-
-@bs.val @bs.scope("localStorage")
-external setItem: (string, string) => unit = "setItem"
-
-let username = ref("username")
-let password = ref("password")
 
 type updateMessage = unit
 type handleLogin = unit
@@ -47,6 +36,23 @@ let getSpecificUser = id => {
   })
   |> ignore
 }
+
+let showMessages = (newState) => {
+        open Js.Promise
+      fetch("https://localhost:44304/api/Messages/")
+      |> then_(response => response["json"]())
+      |> then_(jsonResponse => {
+        newState(LoadingStates.LoadedMessages(jsonResponse))
+        Js.Promise.resolve()
+      })
+      |> catch(_err => {
+        newState(LoadingStates.ErrorLoadingMessages)
+        Js.Promise.resolve()
+      })
+      |> ignore
+
+      None
+    }
 
 let handleLogin = (username: string, password: string) => {
   open Js.Promise
@@ -91,6 +97,7 @@ let getUserById = (id, setState: 'a => unit) => {
 }
 
 let sendMessage = (message, authorId, newState, currentState) => {
+  Js.log(authorId)
   open Js.Promise
   fetch2(
     "https://localhost:44304/api/Messages",
@@ -156,23 +163,25 @@ let deleteMessage = (id, currentState, newState) => {
 
 let getUserDetailsById = (
   profileId,
-  setUserDetails: unit => LoadingStates.userDetailsState,
+  setUsername
 ) => {
   open Js.Promise
   fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
   |> then_(response => response["json"]())
   |> then_(jsonResponse => {
-    Js.Promise.resolve(jsonResponse)
+    setUsername(LoadingStates.LoadedUserDetails(jsonResponse))
+    Js.Promise.resolve()
   })
   |> catch(_err => {
-    Js.Promise.resolve(_err)
+    Js.Promise.resolve()
   })
   |> ignore
+
+  None
 }
 
 let updateMessage = (
   id,
-  authorId,
   oldMessage,
   newMessage,
   currentState, 

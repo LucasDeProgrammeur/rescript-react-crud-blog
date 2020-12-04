@@ -53,6 +53,27 @@ h1 {
      height: 300px;
      color: black;
  }
+button {
+    color: white;
+    background-color: rgb(52, 74, 95);
+    border: 2px solid rgb(22, 44, 65);
+    box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.10);
+    border-radius: 3px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+textarea {
+    background-color: rgb(247, 254, 255);
+    font-family: 'Open Sans', sans-serif;
+    padding: 5px;
+    border: 3px solid rgb(207, 214, 215);
+}
+
+select {
+    padding: 7px;
+    border-radius: 3px;
+    margin: 10px;
+}
 
 /*Blogpost styling*/
  .userIcon {
@@ -169,6 +190,9 @@ textarea {
 
 .sendMessageButton {
     float: right;
+    height: calc(100% - 20px);
+    margin: 10px 10px;
+    width: 10%;
 }
 
  .editIcon:hover {
