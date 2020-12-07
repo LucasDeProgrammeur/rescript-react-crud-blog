@@ -2,6 +2,7 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Cookies = require("../../storageFunctions/Cookies.bs.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var BlogPostCard = require("../BlogPostCard/BlogPostCard.bs.js");
@@ -11,6 +12,8 @@ var ProcessUserCookie = require("../../helpers/ProcessUserCookie.bs.js");
 var AddMessageContainer = require("../AddMessageContainer/AddMessageContainer.bs.js");
 
 function MainContent(Props) {
+  var cookie = Cookies.getCookie("userId");
+  var loginCheck = cookie.length > 0;
   var match = React.useState(function () {
         return /* LoadingMessages */0;
       });
@@ -107,7 +110,7 @@ function MainContent(Props) {
                       RE_EXN_ID: "Match_failure",
                       _1: [
                         "MainContent.res",
-                        80,
+                        85,
                         10
                       ],
                       Error: new Error()
@@ -127,10 +130,10 @@ function MainContent(Props) {
       
     }
   }
-  return React.createElement("main", undefined, React.createElement(AddMessageContainer.make, {
-                  newState: setState,
-                  currentState: state
-                }), React.createElement("select", {
+  return React.createElement("main", undefined, loginCheck ? React.createElement(AddMessageContainer.make, {
+                    newState: setState,
+                    currentState: state
+                  }) : null, React.createElement("select", {
                   onChange: (function (e) {
                       var selectValue = e.target.value;
                       switch (selectValue) {
@@ -147,7 +150,7 @@ function MainContent(Props) {
                                 RE_EXN_ID: "Match_failure",
                                 _1: [
                                   "MainContent.res",
-                                  20,
+                                  25,
                                   8
                                 ],
                                 Error: new Error()

@@ -1,10 +1,8 @@
 @react.component
 let make = () => {
-  <a href="/">
   <header>
-    <h1>{React.string("Rescript+React blog")}</h1>
+    <a href="/"> <h1> {React.string("Rescript+React blog")} </h1> </a>
     <SearchBox />
     <AccountButton />
   </header>
-  </a>
 }

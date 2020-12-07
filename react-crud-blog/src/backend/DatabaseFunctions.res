@@ -15,7 +15,6 @@ external fetch2: (
   },
 ) => Js.Promise.t<'a> = "fetch"
 
-
 @bs.module("snackbar") external showSnackbar: string => unit = "show"
 
 type updateMessage = unit
@@ -37,22 +36,37 @@ let getSpecificUser = id => {
   |> ignore
 }
 
-let showMessages = (newState) => {
-        open Js.Promise
-      fetch("https://localhost:44304/api/Messages/")
-      |> then_(response => response["json"]())
-      |> then_(jsonResponse => {
-        newState(LoadingStates.LoadedMessages(jsonResponse))
-        Js.Promise.resolve()
-      })
-      |> catch(_err => {
-        newState(LoadingStates.ErrorLoadingMessages)
-        Js.Promise.resolve()
-      })
-      |> ignore
+let getUsersByName = (username, newState) => {
+  open Js.Promise
+  fetch("https://localhost:44304/api/UserDetails/namesWith?profileName=" ++ username)
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    newState(_previousState => LoadingStates.LoadedProfiles(jsonResponse))
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    newState(_previousState => LoadingStates.ErrorLoadingProfiles)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
 
-      None
-    }
+let showMessages = newState => {
+  open Js.Promise
+  fetch("https://localhost:44304/api/Messages/")
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    newState(LoadingStates.LoadedMessages(jsonResponse))
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    newState(LoadingStates.ErrorLoadingMessages)
+    Js.Promise.resolve()
+  })
+  |> ignore
+
+  None
+}
 
 let handleLogin = (username: string, password: string) => {
   open Js.Promise
@@ -117,10 +131,10 @@ let sendMessage = (message, authorId, newState, currentState) => {
   |> then_(jsonResponse => {
     showSnackbar("Your new message has been posted!")
 
-
     switch currentState {
-      | LoadingStates.LoadedMessages(data) => newState(_ => LoadingStates.AppendingNewMessage(jsonResponse, data))
-      | _ => newState(_ => LoadingStates.LoadingMessages)
+    | LoadingStates.LoadedMessages(data) =>
+      newState(_ => LoadingStates.AppendingNewMessage(jsonResponse, data))
+    | _ => newState(_ => LoadingStates.LoadingMessages)
     }
     Js.Promise.resolve()
   })
@@ -150,8 +164,9 @@ let deleteMessage = (id, currentState, newState) => {
   |> then_(jsonResponse => {
     showSnackbar("Your message has been deleted")
     switch currentState {
-      | LoadingStates.LoadedMessages(data) => newState(_ => LoadingStates.ProcessingMessageRemoval(jsonResponse["id"], data))
-      | _ => newState(_ => LoadingStates.LoadingMessages)
+    | LoadingStates.LoadedMessages(data) =>
+      newState(_ => LoadingStates.ProcessingMessageRemoval(jsonResponse["id"], data))
+    | _ => newState(_ => LoadingStates.LoadingMessages)
     }
     Js.Promise.resolve()
   })
@@ -161,10 +176,7 @@ let deleteMessage = (id, currentState, newState) => {
   |> ignore
 }
 
-let getUserDetailsById = (
-  profileId,
-  setUsername
-) => {
+let getUserDetailsById = (profileId, setUsername) => {
   open Js.Promise
   fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
   |> then_(response => response["json"]())
@@ -180,13 +192,7 @@ let getUserDetailsById = (
   None
 }
 
-let updateMessage = (
-  id,
-  oldMessage,
-  newMessage,
-  currentState, 
-  newState
-) => {
+let updateMessage = (id, oldMessage, newMessage, currentState, newState) => {
   open Js.Promise
   fetch2(
     "https://localhost:44304/api/Messages/" ++ id,
@@ -210,8 +216,9 @@ let updateMessage = (
   |> then_(response => {
     showSnackbar("This message has been updated!")
     switch currentState {
-      | LoadingStates.LoadedMessages(data) => newState(_ => LoadingStates.ProcessingMessageUpdate(response["id"], newMessage, data))
-      | _ => newState(_ => LoadingStates.LoadingMessages)
+    | LoadingStates.LoadedMessages(data) =>
+      newState(_ => LoadingStates.ProcessingMessageUpdate(response["id"], newMessage, data))
+    | _ => newState(_ => LoadingStates.LoadingMessages)
     }
     Js.Promise.resolve(response)
   })

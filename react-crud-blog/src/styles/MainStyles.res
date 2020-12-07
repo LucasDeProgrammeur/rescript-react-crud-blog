@@ -1,4 +1,4 @@
-let reasonReactBlue = "#48a9dc";
+let reasonReactBlue = "#48a9dc"
 // The {j|...|j} feature is just string interpolation, from
 // bucklescript.github.io/docs/en/interop-cheatsheet#string-unicode-interpolation
 // This allows us to conveniently write CSS, together with variables, by
@@ -77,12 +77,19 @@ select {
 
 /*Blogpost styling*/
  .userIcon {
-     width: 48px;
-     margin: 20px;
      border-radius: 50%;
      background-color: rgb(120, 120, 120);
      display: inline-block;
      float: left;
+ }
+
+ .biggerIcon {
+    margin: 20px;
+    width: 48px;
+ }
+ 
+ .smallerIcon {
+     width: 24px;   
  }
 
  .editIcon {
@@ -95,21 +102,72 @@ select {
  .usernamePost {
      margin: 20px;
      padding-top: 10px;
-     display: inline-block
+     display: inline-block;
+     cursor: pointer;
  }
 
  .postContent {
      margin: 20px 70px;
  }
 
+/* Account button styling */
  .accountButton {
      font-family: 'Open Sans', sans-serif;
      float: right;
      height: 100%;
+     min-width: 100px;
  }
 
+.accountMenu {
+    display: none;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+.accountItem {
+    width: 100%;
+    padding: 10px 0;
+    overflow: none;
+    text-align: center;
+    cursor: pointer
+}
+
+.accountItem:hover {
+    background-color: rgb(52, 74, 95);
+    color: white;
+}
+
+ .accountSettings:hover .accountMenu {display: block;}
+
+ .dropdown:hover .dropdown-content {display: block;}
+
+ /* Searchbox styling */
+  .searchSuggestions:hover .searchResults {display: block;}
+
+  .searchResults {
+      background-color: white;
+      color: black;
+      z-index: 1;      
+      box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.60);
+      position: fixed;
+      width: 300px;
+  }
+
+  .searchItem {
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+  }
+
+  .searchItem:hover {
+      background-color: rgb(52, 74, 95);
+    color: white;
+  }
+
 /*Login box styling*/
- .loginBox form input,  .loginBox form label {
+ .loginBox input,  .loginBox label {
      display: block;
      width: 80%;
      margin: 10px auto; 
@@ -198,4 +256,4 @@ textarea {
  .editIcon:hover {
      background-color: rgb(230, 230, 230);
  }
-`;
+`

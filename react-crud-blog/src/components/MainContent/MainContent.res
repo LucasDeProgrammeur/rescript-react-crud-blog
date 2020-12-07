@@ -4,16 +4,21 @@ type id = int
 
 @react.component
 let make = () => {
+  let cookie = Cookies.getCookie("userId")
+  let loginCheck = if Js.Array.length(cookie) > 0 {
+    true
+  } else {
+    false
+  }
   let (state, setState) = React.useState(() => LoadingStates.LoadingMessages)
   let (sorting, setSorting) = React.useState(() => SortStates.ByNewest)
   let (searchQuery, setSearchQuery) = React.useState(() => "")
   React.useEffect0(() => {
-    
-      DatabaseFunctions.showMessages((newState) => setState(_ => newState))
+    DatabaseFunctions.showMessages(newState => setState(_ => newState))
   })
 
   <main>
-    <AddMessageContainer newState={setState} currentState={state} />
+    {loginCheck ? <AddMessageContainer newState={setState} currentState={state} /> : React.null}
     <select
       onChange={e => {
         let selectValue = ReactEvent.Form.target(e)["value"]
@@ -38,31 +43,31 @@ let make = () => {
       <p> {React.string("An error occurred! The server may be down.")} </p>
     | LoadingStates.LoadingMessages => <LoadAnimation />
     | LoadingStates.AppendingNewMessage(newMessage, messageList) => {
-        let value = Js.Array.push(newMessage, messageList)
+        Js.Array.push(newMessage, messageList) |> ignore
         setState(_ => LoadingStates.LoadedMessages(messageList))
         <LoadAnimation />
       }
     | LoadingStates.ProcessingMessageRemoval(messageId, messages) => {
-      setState(_ => LoadingStates.LoadedMessages(Belt.Array.keepMap(messages, x => {
-        if (x["id"] == messageId) {
-          None
-        } else {
-          Some(x)
-        }
-      })))
-      <LoadAnimation />
-    }
+        setState(_ => LoadingStates.LoadedMessages(Belt.Array.keepMap(messages, x => {
+            if x["id"] == messageId {
+              None
+            } else {
+              Some(x)
+            }
+          })))
+        <LoadAnimation />
+      }
     | LoadingStates.ProcessingMessageUpdate(messageId, newMessage, messages) => {
-      setState(_ => LoadingStates.LoadedMessages(Belt.Array.keepMap(messages, x => {
-        if (x["id"] == messageId) {
-          let newMessage = {"authorId": x["authorId"], "id": x["id"], "message1" : newMessage}
-          Some(newMessage)
-        } else {
-          Some(x)
-        }
-      })))
-      <LoadAnimation />
-    }
+        setState(_ => LoadingStates.LoadedMessages(Belt.Array.keepMap(messages, x => {
+            if x["id"] == messageId {
+              let newMessage = {"authorId": x["authorId"], "id": x["id"], "message1": newMessage}
+              Some(newMessage)
+            } else {
+              Some(x)
+            }
+          })))
+        <LoadAnimation />
+      }
     | LoadingStates.LoadedMessages(messages) => {
         let filteredMessages = Belt.Array.keepMap(messages, x =>
           if (
@@ -88,9 +93,7 @@ let make = () => {
             message={x}
             currentState={state}
             newState={setState}
-            isCreator={
-              ProcessUserCookie.getLoggedInUserId() == string_of_int(x["authorId"])
-            }
+            isCreator={ProcessUserCookie.getLoggedInUserId() == string_of_int(x["authorId"])}
           />
         })->React.array
       }

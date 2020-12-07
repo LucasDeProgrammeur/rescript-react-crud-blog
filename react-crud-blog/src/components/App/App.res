@@ -3,7 +3,6 @@
 @react.component
 let make = () => {
   let url = ReasonReactRouter.useUrl()
-
   <>
     <Header />
     {switch url.path {

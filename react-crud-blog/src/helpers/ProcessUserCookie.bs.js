@@ -5,7 +5,7 @@ var Caml_array = require("bs-platform/lib/js/caml_array.js");
 
 function getLoggedInUserId(param) {
   var cookie = Cookies.getCookie("userId");
-  if (cookie.length === 1) {
+  if (cookie.length > 0) {
     return Caml_array.get(cookie, 0);
   } else {
     return "Login";

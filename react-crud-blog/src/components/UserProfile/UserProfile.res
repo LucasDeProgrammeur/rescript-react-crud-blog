@@ -2,9 +2,13 @@
 
 @react.component
 let make = (~profileId) => {
+  let urlPath = ReasonReactRouter.useUrl().path
+
   let (userDetails, setUserDetails) = React.useState(() =>
     LoadingStates.LoadingUserDetails
   )
+
+  let (userId, setUserId) = React.useState(() => 0)
   React.useEffect0(() => {
     {
       open Js.Promise
@@ -24,7 +28,7 @@ let make = (~profileId) => {
     }
 
     None
-  })
+})
   <>
     {switch userDetails {
     | LoadingStates.ErrorLoadingUserDetails =>

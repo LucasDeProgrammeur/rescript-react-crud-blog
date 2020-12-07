@@ -22,6 +22,12 @@ function getCookie(cname) {
               }));
 }
 
+function clearCookie(cname) {
+  document.cookie = cname + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  
+}
+
 exports.setCookie = setCookie;
 exports.getCookie = getCookie;
+exports.clearCookie = clearCookie;
 /* No side effect */

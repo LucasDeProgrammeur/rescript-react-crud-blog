@@ -31,10 +31,7 @@ let makeSafe = (s: string): string =>
  *  If it is a Multiple (list of items), then add this new value to the
  *   list of items
  */
-let addKeyValue = (
-  accumulator: Js.Dict.t<queryItem>,
-  kvPair: string,
-): Js.Dict.t<queryItem> =>
+let addKeyValue = (accumulator: Js.Dict.t<queryItem>, kvPair: string): Js.Dict.t<queryItem> =>
   switch Js.String.split("=", kvPair) {
   | ["", ""] => accumulator
   | [key, codedValue] =>
@@ -44,8 +41,7 @@ let addKeyValue = (
     | Some(v) =>
       switch v {
       | Single(s) => Js.Dict.set(accumulator, key, Multiple(list{value, s}))
-      | Multiple(m) =>
-        Js.Dict.set(accumulator, key, Multiple(list{value, ...m}))
+      | Multiple(m) => Js.Dict.set(accumulator, key, Multiple(list{value, ...m}))
       }
     }
     accumulator
@@ -74,10 +70,7 @@ let showItem = (query: Js.Dict.t<queryItem>, key: string): unit => {
 /* Encoded an acute-accented o in unicode as part of the name
  * (via https://www.branah.com/unicode-converter)
  */
-let query = parseQueryString(
-  "age=35&name=Ram%c3%b3n&multi=first&multi=second&occupation=baker",
-)
+let query = parseQueryString("age=35&name=Ram%c3%b3n&multi=first&multi=second&occupation=baker")
 showItem(query, "multi")
 showItem(query, "age")
 showItem(query, "name")
-

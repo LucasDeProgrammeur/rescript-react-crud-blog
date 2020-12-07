@@ -24,4 +24,4 @@ let style = j`
   visibility: visible;
   transform: none;
 }
-`;
+`

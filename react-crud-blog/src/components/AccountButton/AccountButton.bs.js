@@ -2,6 +2,7 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Cookies = require("../../storageFunctions/Cookies.bs.js");
 var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
 var ProcessUserCookie = require("../../helpers/ProcessUserCookie.bs.js");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
@@ -24,12 +25,30 @@ function AccountButton(Props) {
         }
         
       });
-  return React.createElement("button", {
-              className: "accountButton",
-              onClick: (function (param) {
-                  return ReasonReactRouter.push(typeof profileName === "number" ? "/login" : "/profile/" + cookie);
-                })
-            }, typeof profileName === "number" ? "Login" : profileName._0.profileName);
+  return React.createElement("div", {
+              className: "accountSettings"
+            }, React.createElement("button", {
+                  className: "accountButton",
+                  onClick: (function (param) {
+                      return ReasonReactRouter.push(typeof profileName === "number" ? "/login" : "/profile/" + cookie);
+                    })
+                }, typeof profileName === "number" ? "Login" : profileName._0.profileName), typeof profileName === "number" ? null : React.createElement("div", {
+                    className: "accountMenu"
+                  }, React.createElement("div", {
+                        className: "accountItem",
+                        onClick: (function (param) {
+                            return ReasonReactRouter.push("/profile/" + cookie);
+                          })
+                      }, "Profile"), React.createElement("div", {
+                        className: "accountItem",
+                        onClick: (function (param) {
+                            Cookies.clearCookie("userId");
+                            ReasonReactRouter.push("/login");
+                            return Curry._1(setProfileName, (function (param) {
+                                          return /* ErrorLoadingUserDetails */1;
+                                        }));
+                          })
+                      }, "Logout")));
 }
 
 var make = AccountButton;

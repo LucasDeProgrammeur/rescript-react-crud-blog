@@ -3,6 +3,7 @@ type divClassName = string
 @react.component
 let make = (~message, ~isOpen, ~setIsOpen, ~currentState, ~newState) => {
   let (newMessage, setNewMessage) = React.useState(_ => message)
+
   isOpen
     ? <>
         <div className={"backgroundFade"} />
@@ -13,20 +14,28 @@ let make = (~message, ~isOpen, ~setIsOpen, ~currentState, ~newState) => {
             src="https://image.flaticon.com/icons/png/128/1828/1828774.png"
           />
           <h2> {React.string("Edit message")} </h2>
-          <textarea 
-          value={newMessage["message1"]}
-          onChange={(e) => {
-            let newValue = ReactEvent.Form.target(e)["value"]
-         
-            setNewMessage(_ => {"id": newMessage["id"], "message1": newValue, "authorId": newMessage["authorId"]})
-          }}></textarea>
-          <button 
-          onClick={(_) => { 
+          <textarea
+            value={newMessage["message1"]}
+            onChange={e => {
+              let newValue = ReactEvent.Form.target(e)["value"]
 
-            DatabaseFunctions.updateMessage(message["id"], message, newMessage["message1"], currentState, newState)
-            
+              setNewMessage(_ =>
+                {"id": newMessage["id"], "message1": newValue, "authorId": newMessage["authorId"]}
+              )
             }}
-            >{React.string("Update")}</button>
+          />
+          <button
+            onClick={_ => {
+              DatabaseFunctions.updateMessage(
+                message["id"],
+                message,
+                newMessage["message1"],
+                currentState,
+                newState,
+              )
+            }}>
+            {React.string("Update")}
+          </button>
         </div>
       </>
     : <div className={"noDisplay"} />

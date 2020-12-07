@@ -20,6 +20,7 @@ function BlogPostCard(Props) {
         return false;
       });
   var setIsOpen = match$1[1];
+  console.log(message);
   React.useEffect((function () {
           return DatabaseFunctions.getUserById(message.authorId, (function (newState) {
                         return Curry._1(setState, (function (param) {
@@ -42,7 +43,7 @@ function BlogPostCard(Props) {
                                     }));
                       })
                   }) : null, React.createElement("img", {
-                  className: "userIcon",
+                  className: "userIcon biggerIcon",
                   alt: "User icon",
                   src: "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"
                 }), React.createElement(EditPostModal.make, {

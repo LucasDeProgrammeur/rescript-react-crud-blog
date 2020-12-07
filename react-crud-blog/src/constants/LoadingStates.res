@@ -1,12 +1,12 @@
-type usernameState = 
-    | LoadingUsername
-    | ErrorFetchingUsername
-    | LoadedUsername(DatabaseContexts.user)
+type usernameState =
+  | LoadingUsername
+  | ErrorFetchingUsername
+  | LoadedUsername(DatabaseContexts.user)
 
-type messageState = 
-    | LoadingMessage
-    | ErrorLoadingMessage
-    | LoadedMessage(DatabaseContexts.message)
+type messageState =
+  | LoadingMessage
+  | ErrorLoadingMessage
+  | LoadedMessage(DatabaseContexts.message)
 
 type messagesState =
   | LoadingMessages
@@ -16,7 +16,12 @@ type messagesState =
   | ProcessingMessageUpdate(string, string, array<DatabaseContexts.message>)
   | LoadedMessages(array<DatabaseContexts.message>)
 
-type userDetailsState = 
-    | LoadingUserDetails
-    | ErrorLoadingUserDetails
-    | LoadedUserDetails(DatabaseContexts.userDetails)
+type userDetailsState =
+  | LoadingUserDetails
+  | ErrorLoadingUserDetails
+  | LoadedUserDetails(DatabaseContexts.userDetails)
+
+type userProfilesState =
+  | LoadingProfiles
+  | ErrorLoadingProfiles
+  | LoadedProfiles(DatabaseContexts.userProfiles)

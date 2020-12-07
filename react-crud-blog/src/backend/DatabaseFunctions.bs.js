@@ -18,6 +18,25 @@ function getSpecificUser(id) {
   
 }
 
+function getUsersByName(username, newState) {
+  fetch("https://localhost:44304/api/UserDetails/namesWith?profileName=" + username).then(function (response) {
+            return response.json();
+          }).then(function (jsonResponse) {
+          Curry._1(newState, (function (_previousState) {
+                  return /* LoadedProfiles */{
+                          _0: jsonResponse
+                        };
+                }));
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Curry._1(newState, (function (_previousState) {
+                return /* ErrorLoadingProfiles */1;
+              }));
+        return Promise.resolve(undefined);
+      });
+  
+}
+
 function showMessages(newState) {
   fetch("https://localhost:44304/api/Messages/").then(function (response) {
             return response.json();
@@ -215,6 +234,7 @@ function updateMessage(id, oldMessage, newMessage, currentState, newState) {
 }
 
 exports.getSpecificUser = getSpecificUser;
+exports.getUsersByName = getUsersByName;
 exports.showMessages = showMessages;
 exports.handleLogin = handleLogin;
 exports.getUserById = getUserById;
