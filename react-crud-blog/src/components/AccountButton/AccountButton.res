@@ -8,7 +8,7 @@ let make = () => {
     | LoadingStates.LoadingUserDetails =>
       cookie == "Login"
         ? None
-        : DatabaseFunctions.getUserDetailsById(cookie, newState => setProfileName(_ => newState))
+        : DatabaseFunctions.getUserDetailsById(int_of_string(cookie), newState => setProfileName(_ => newState))
     | LoadingStates.LoadedUserDetails(_)
     | LoadingStates.ErrorLoadingUserDetails =>
       None
@@ -39,6 +39,7 @@ let make = () => {
         <div className="accountItem" onClick={_ => ReasonReactRouter.push("/profile/" ++ cookie)}>
           {React.string("Profile")}
         </div>
+        <div className="accountItem" onClick={_ => ReasonReactRouter.push("/accountSettings")}>{React.string("Settings")}</div>
         <div
           className="accountItem"
           onClick={_ => {

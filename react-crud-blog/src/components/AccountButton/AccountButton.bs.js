@@ -3,6 +3,7 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Cookies = require("../../storageFunctions/Cookies.bs.js");
+var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
 var ProcessUserCookie = require("../../helpers/ProcessUserCookie.bs.js");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
@@ -17,7 +18,7 @@ function AccountButton(Props) {
   var profileName = match[0];
   React.useEffect(function () {
         if (typeof profileName === "number" && !(profileName !== 0 || cookie === "Login")) {
-          return DatabaseFunctions.getUserDetailsById(cookie, (function (newState) {
+          return DatabaseFunctions.getUserDetailsById(Caml_format.caml_int_of_string(cookie), (function (newState) {
                         return Curry._1(setProfileName, (function (param) {
                                       return newState;
                                     }));
@@ -40,6 +41,11 @@ function AccountButton(Props) {
                             return ReasonReactRouter.push("/profile/" + cookie);
                           })
                       }, "Profile"), React.createElement("div", {
+                        className: "accountItem",
+                        onClick: (function (param) {
+                            return ReasonReactRouter.push("/accountSettings");
+                          })
+                      }, "Settings"), React.createElement("div", {
                         className: "accountItem",
                         onClick: (function (param) {
                             Cookies.clearCookie("userId");

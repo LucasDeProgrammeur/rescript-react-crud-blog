@@ -3,6 +3,7 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var Cookies = require("../storageFunctions/Cookies.bs.js");
 var Snackbar = require("snackbar");
+var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var LoginStates = require("../constants/LoginStates.bs.js");
 
 function getSpecificUser(id) {
@@ -174,7 +175,7 @@ function deleteMessage(id, currentState, newState) {
 }
 
 function getUserDetailsById(profileId, setUsername) {
-  fetch("https://localhost:44304/api/UserDetails/" + profileId).then(function (response) {
+  fetch("https://localhost:44304/api/UserDetails/" + String(profileId)).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
           Curry._1(setUsername, /* LoadedUserDetails */{
@@ -182,6 +183,61 @@ function getUserDetailsById(profileId, setUsername) {
               });
           return Promise.resolve(undefined);
         }).catch(function (_err) {
+        return Promise.resolve(undefined);
+      });
+  
+}
+
+function updateUserDetails(userId, newDetails, newState) {
+  fetch("https://localhost:44304/api/UserDetails/" + userId, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Credentials": "true",
+                mode: "no-cors",
+                credentials: "include"
+              },
+              body: JSON.stringify({
+                    userId: Caml_format.caml_int_of_string(userId),
+                    followers: newDetails.followers,
+                    profileName: newDetails.profileName,
+                    bio: newDetails.bio
+                  }),
+              redirect: "follow"
+            }).then(function (response) {
+            return response.json();
+          }).then(function (response) {
+          Snackbar.show("Your (specified) user details have been updated");
+          Curry._1(newState, /* LoadingUserDetails */0);
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Snackbar.show("Whoops, something went wrong");
+        return Promise.resolve(undefined);
+      });
+  
+}
+
+function updateUser(userId, username, password) {
+  fetch("https://localhost:44304/api/UserDetails/" + userId, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Credentials": "true",
+                mode: "no-cors",
+                credentials: "include"
+              },
+              body: JSON.stringify({
+                    username: username,
+                    password: password
+                  }),
+              redirect: "follow"
+            }).then(function (response) {
+            return response.json();
+          }).then(function (response) {
+          Snackbar.show("Your password has been changed!");
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Snackbar.show("Whoops, something went wrong");
         return Promise.resolve(undefined);
       });
   
@@ -241,5 +297,7 @@ exports.getUserById = getUserById;
 exports.sendMessage = sendMessage;
 exports.deleteMessage = deleteMessage;
 exports.getUserDetailsById = getUserDetailsById;
+exports.updateUserDetails = updateUserDetails;
+exports.updateUser = updateUser;
 exports.updateMessage = updateMessage;
 /* snackbar Not a pure module */

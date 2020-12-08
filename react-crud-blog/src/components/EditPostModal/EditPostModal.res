@@ -4,6 +4,10 @@ type divClassName = string
 let make = (~message, ~isOpen, ~setIsOpen, ~currentState, ~newState) => {
   let (newMessage, setNewMessage) = React.useState(_ => message)
 
+  React.useEffect1(x => {
+    setNewMessage(_ => message)
+    None
+  }, [message])
   isOpen
     ? <>
         <div className={"backgroundFade"} />

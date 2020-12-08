@@ -19,7 +19,10 @@ let style = j`
      font-size: 20px;
  }
 
- 
+.pageMargin {
+    margin: 20px;
+} 
+
 h1 {
     color: white;
 }
@@ -150,7 +153,6 @@ select {
       background-color: white;
       color: black;
       z-index: 1;      
-      box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.60);
       position: fixed;
       width: 300px;
   }
@@ -186,6 +188,11 @@ select {
 
 textarea {
     width: 80%;
+}
+
+.lineSpacing {
+    display: table;
+    margin: 20px;
 }
 
  .centerText {
@@ -256,4 +263,34 @@ textarea {
  .editIcon:hover {
      background-color: rgb(230, 230, 230);
  }
+
+ @media screen and (max-width: 800px) {
+     .sendMessageButton {
+         width: 15%;
+     }
+     h1 {
+         margin-top: 1px;
+         font-size: 14px !important;
+     }
+     .searchSuggestions, .searchBox, .searchResults {
+         width: 100px;
+     }
+
+    main {
+        width: 90%;
+    }
+
+    .pageMargin {
+        margin: 0;
+    }
+
+    .messageContainer {
+        width: 60%;
+    }
+ }
+
+/* Color styles */
+    .urgent {
+        color: rgb(222, 22, 45);
+    }
 `

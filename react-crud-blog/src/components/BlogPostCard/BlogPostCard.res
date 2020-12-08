@@ -1,11 +1,10 @@
 type setState = unit
 @react.component
 let make = (~message, ~currentState, ~newState, ~isCreator, _) => {
-  let (state, setState) = React.useState(() => LoadingStates.LoadingUsername)
+  let (state, setState) = React.useState(() => LoadingStates.LoadingUserDetails)
   let (isOpen, setIsOpen) = React.useState(() => false)
-  Js.log(message)
   React.useEffect0(() => {
-    DatabaseFunctions.getUserById(message["authorId"], newState => setState(_ => newState))
+    DatabaseFunctions.getUserDetailsById(message["authorId"], newState => setState(_ => newState))
   })
 
   <article>
@@ -39,9 +38,9 @@ let make = (~message, ~currentState, ~newState, ~isCreator, _) => {
       className="usernamePost"
       onClick={_ => ReasonReactRouter.push("/profile/" ++ string_of_int(message["authorId"]))}>
       {switch state {
-      | LoadingStates.ErrorFetchingUsername => React.string("An error occurred")
-      | LoadingStates.LoadingUsername => React.string("Loading")
-      | LoadingStates.LoadedUsername(user) => React.string(user["username"])
+      | LoadingStates.ErrorLoadingUserDetails => React.string("An error occurred")
+      | LoadingStates.LoadingUserDetails => React.string("Loading")
+      | LoadingStates.LoadedUserDetails(details) => React.string(details["profileName"])
       }}
     </h4>
     <p className="postContent"> {React.string(message["message1"])} </p>

@@ -178,7 +178,7 @@ let deleteMessage = (id, currentState, newState) => {
 
 let getUserDetailsById = (profileId, setUsername) => {
   open Js.Promise
-  fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
+  fetch("https://localhost:44304/api/UserDetails/" ++ string_of_int(profileId))
   |> then_(response => response["json"]())
   |> then_(jsonResponse => {
     setUsername(LoadingStates.LoadedUserDetails(jsonResponse))
@@ -190,6 +190,71 @@ let getUserDetailsById = (profileId, setUsername) => {
   |> ignore
 
   None
+}
+
+let updateUserDetails = (userId, newDetails, newState) => {
+  open Js.Promise
+  fetch2(
+    "https://localhost:44304/api/UserDetails/" ++ userId,
+    {
+      "method": "PUT",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "body": Js.Json.stringifyAny({
+        "userId": int_of_string(userId),
+        "followers": newDetails["followers"],
+        "profileName": newDetails["profileName"],
+        "bio": newDetails["bio"],
+      }),
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(response => {
+    showSnackbar("Your (specified) user details have been updated")
+    newState(LoadingStates.LoadingUserDetails)
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    showSnackbar("Whoops, something went wrong")
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let updateUser = (userId, username, password) => {
+  open Js.Promise
+  fetch2(
+    "https://localhost:44304/api/UserDetails/" ++ userId,
+    {
+      "method": "PUT",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "body": Js.Json.stringifyAny({
+        "username": username,
+        "password": password
+      }),
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(response => {
+    showSnackbar("Your password has been changed!")
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    showSnackbar("Whoops, something went wrong")
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let updateMessage = (id, oldMessage, newMessage, currentState, newState) => {

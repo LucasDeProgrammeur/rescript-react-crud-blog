@@ -12,7 +12,7 @@ function BlogPostCard(Props) {
   var newState = Props.newState;
   var isCreator = Props.isCreator;
   var match = React.useState(function () {
-        return /* LoadingUsername */0;
+        return /* LoadingUserDetails */0;
       });
   var setState = match[1];
   var state = match[0];
@@ -20,9 +20,8 @@ function BlogPostCard(Props) {
         return false;
       });
   var setIsOpen = match$1[1];
-  console.log(message);
   React.useEffect((function () {
-          return DatabaseFunctions.getUserById(message.authorId, (function (newState) {
+          return DatabaseFunctions.getUserDetailsById(message.authorId, (function (newState) {
                         return Curry._1(setState, (function (param) {
                                       return newState;
                                     }));
@@ -63,7 +62,7 @@ function BlogPostCard(Props) {
                     })
                 }, typeof state === "number" ? (
                     state !== 0 ? "An error occurred" : "Loading"
-                  ) : state._0.username), React.createElement("p", {
+                  ) : state._0.profileName), React.createElement("p", {
                   className: "postContent"
                 }, message.message1));
 }

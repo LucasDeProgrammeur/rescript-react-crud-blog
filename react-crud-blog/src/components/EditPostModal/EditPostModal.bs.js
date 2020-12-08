@@ -15,6 +15,12 @@ function EditPostModal(Props) {
       });
   var setNewMessage = match[1];
   var newMessage = match[0];
+  React.useEffect((function () {
+          Curry._1(setNewMessage, (function (param) {
+                  return message;
+                }));
+          
+        }), [message]);
   if (isOpen) {
     return React.createElement(React.Fragment, undefined, React.createElement("div", {
                     className: "backgroundFade"
