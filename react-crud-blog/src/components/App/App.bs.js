@@ -2,6 +2,7 @@
 
 var React = require("react");
 var Header = require("../Header/Header.bs.js");
+var SignUp = require("../SignUp/SignUp.bs.js");
 var MainContent = require("../MainContent/MainContent.bs.js");
 var UserProfile = require("../UserProfile/UserProfile.bs.js");
 var LoginContent = require("../LoginContent/LoginContent.bs.js");
@@ -58,6 +59,13 @@ function App(Props) {
                 });
           } else {
             exit = 1;
+          }
+          break;
+      case "signUp" :
+          if (match.tl) {
+            exit = 1;
+          } else {
+            tmp = React.createElement(SignUp.make, {});
           }
           break;
       default:

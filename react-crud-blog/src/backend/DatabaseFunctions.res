@@ -1,4 +1,8 @@
 @bs.val external fetch: string => Js.Promise.t<'a> = "fetch"
+type md5
+@bs.module("crypto-js") external md5: string => md5 = "MD5"
+@bs.send external toString: md5 => string = "toString"
+
 @bs.val
 external fetch2: (
   string,
@@ -69,25 +73,31 @@ let showMessages = newState => {
 }
 
 let handleLogin = (username: string, password: string) => {
+  let passwordHash = md5(password)
   open Js.Promise
   fetch(
     "https://localhost:44304/api/Users/authenticate?username=" ++
     username ++
     "&password=" ++
-    password,
+    toString(passwordHash),
   )
   |> Js.Promise.then_(response => response["json"]())
   |> Js.Promise.then_(jsonResponse => {
-    LoginStates.authenticated.contents = LoginStates.LoggedIn({
-      userId: jsonResponse["id"],
-    })
-    Cookies.setCookie("userId", jsonResponse["id"], 2)
-    showSnackbar("You have logged in!")
-    Js.Promise.resolve(jsonResponse["id"])
+    if Js.String2.length(jsonResponse["username"]) == 0 {
+      showSnackbar(StatusMessages.incorrectCredentials)
+      Js.Promise.resolve("incorrect")
+    } else {
+      LoginStates.authenticated.contents = LoginStates.LoggedIn({
+        userId: jsonResponse["id"],
+      })
+      Cookies.setCookie("userId", jsonResponse["id"], 2)
+      showSnackbar(StatusMessages.loggedIn)
+      Js.Promise.resolve(jsonResponse["id"])
+    }
   })
   |> catch(_err => {
     LoginStates.authenticated.contents = LoginStates.LoggedOut
-    showSnackbar("Whoops, something went wrong")
+    showSnackbar(StatusMessages.incorrectCredentials)
     Js.log2("Failure!!", _err)
     Js.Promise.resolve("error")
   })
@@ -129,7 +139,7 @@ let sendMessage = (message, authorId, newState, currentState) => {
   )
   |> then_(response => response["json"]())
   |> then_(jsonResponse => {
-    showSnackbar("Your new message has been posted!")
+    showSnackbar(StatusMessages.postedMessage)
 
     switch currentState {
     | LoadingStates.LoadedMessages(data) =>
@@ -162,7 +172,7 @@ let deleteMessage = (id, currentState, newState) => {
   )
   |> then_(response => response["json"]())
   |> then_(jsonResponse => {
-    showSnackbar("Your message has been deleted")
+    showSnackbar(StatusMessages.deletedMessage)
     switch currentState {
     | LoadingStates.LoadedMessages(data) =>
       newState(_ => LoadingStates.ProcessingMessageRemoval(jsonResponse["id"], data))
@@ -214,22 +224,23 @@ let updateUserDetails = (userId, newDetails, newState) => {
     },
   )
   |> then_(response => response["json"]())
-  |> then_(response => {
-    showSnackbar("Your (specified) user details have been updated")
+  |> then_(_ => {
+    showSnackbar(StatusMessages.userDetailsUpdated)
     newState(LoadingStates.LoadingUserDetails)
     Js.Promise.resolve()
   })
   |> catch(_err => {
-    showSnackbar("Whoops, something went wrong")
+    showSnackbar(StatusMessages.error)
     Js.Promise.resolve()
   })
   |> ignore
 }
 
 let updateUser = (userId, username, password) => {
+  let passwordHash = md5(password)
   open Js.Promise
   fetch2(
-    "https://localhost:44304/api/UserDetails/" ++ userId,
+    "https://localhost:44304/api/Users/" ++ string_of_int(userId),
     {
       "method": "PUT",
       "headers": {
@@ -239,20 +250,79 @@ let updateUser = (userId, username, password) => {
         "credentials": "include",
       },
       "body": Js.Json.stringifyAny({
+        "id": userId,
         "username": username,
-        "password": password
+        "password": toString(passwordHash),
+      }),
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(_ => {
+    showSnackbar(StatusMessages.passwordUpdated)
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    showSnackbar(StatusMessages.error)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let createProfile = (profileName, userId) => {
+  open Js.Promise
+  fetch2(
+    "https://localhost:44304/api/UserDetails/",
+    {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "body": Js.Json.stringifyAny({
+        "profileName": profileName,
+        "followers": 0,
+        "bio": "",
+        "userId": userId,
+      }),
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(_ => {
+    showSnackbar(StatusMessages.accountCreated)
+    Js.Promise.resolve() |> catch(_err => {
+      showSnackbar(StatusMessages.error)
+      Js.Promise.resolve()
+    })
+  })
+}
+
+let createUser = (username, password, profileName) => {
+  open Js.Promise
+  fetch2(
+    "https://localhost:44304/api/Users/",
+    {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "body": Js.Json.stringifyAny({
+        "username": username,
+        "password": password,
       }),
       "redirect": "follow",
     },
   )
   |> then_(response => response["json"]())
   |> then_(response => {
-    showSnackbar("Your password has been changed!")
-    Js.Promise.resolve()
-  })
-  |> catch(_err => {
-    showSnackbar("Whoops, something went wrong")
-    Js.Promise.resolve()
+    showSnackbar(StatusMessages.accountCreated)
+    createProfile(profileName, response["id"])
   })
   |> ignore
 }
@@ -288,7 +358,7 @@ let updateMessage = (id, oldMessage, newMessage, currentState, newState) => {
     Js.Promise.resolve(response)
   })
   |> catch(_err => {
-    showSnackbar("Whoops, something went wrong")
+    showSnackbar(StatusMessages.error)
     Js.Promise.resolve(oldMessage)
   })
   |> ignore

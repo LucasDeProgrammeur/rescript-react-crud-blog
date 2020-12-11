@@ -3,6 +3,7 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var DatabaseFunctions = require("../../backend/DatabaseFunctions.bs.js");
+var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 
 function LoginContent(Props) {
   var match = React.useState(function () {
@@ -35,7 +36,12 @@ function LoginContent(Props) {
                       onClick: (function (param) {
                           return DatabaseFunctions.handleLogin(username, password);
                         })
-                    }, "Login")));
+                    }, "Login")), React.createElement("h4", {
+                  className: "centerText pointerCursor",
+                  onClick: (function (param) {
+                      return ReasonReactRouter.push("/signUp");
+                    })
+                }, "Want to sign up? Click here"));
 }
 
 var make = LoginContent;

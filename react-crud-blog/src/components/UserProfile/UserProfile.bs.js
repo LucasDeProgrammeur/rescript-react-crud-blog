@@ -3,19 +3,14 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var LoadAnimation = require("../LoadAnimation/LoadAnimation.bs.js");
-var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.bs.js");
 
 function UserProfile(Props) {
   var profileId = Props.profileId;
-  ReasonReactRouter.useUrl(undefined, undefined).path;
   var match = React.useState(function () {
         return /* LoadingUserDetails */0;
       });
   var setUserDetails = match[1];
   var userDetails = match[0];
-  React.useState(function () {
-        return 0;
-      });
   React.useEffect((function () {
           fetch("https://localhost:44304/api/UserDetails/" + profileId).then(function (response) {
                     return response.json();

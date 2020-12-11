@@ -13,7 +13,7 @@ let make = () => {
     />
     <div className="searchResults">
       {switch userProfiles {
-      | LoadingStates.LoadedProfiles(profiles) => profiles->Belt.Array.mapWithIndex((i, x) => {
+      | LoadingStates.LoadedProfiles(profiles) => profiles->Belt.Array.mapWithIndex((_, x) => {
           <div
             onClick={_ => window["location"]["replace"]("/profile/" ++ string_of_int(x["userId"]))}
             className="searchItem">
@@ -26,6 +26,7 @@ let make = () => {
           </div>
         })->React.array
       | LoadingStates.LoadingProfiles => React.null
+      | LoadingStates.ErrorLoadingProfiles => <h1>{React.string("Something went wrong")}</h1>
       }}
     </div>
   </div>

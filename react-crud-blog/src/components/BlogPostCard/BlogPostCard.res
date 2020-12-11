@@ -7,6 +7,11 @@ let make = (~message, ~currentState, ~newState, ~isCreator, _) => {
     DatabaseFunctions.getUserDetailsById(message["authorId"], newState => setState(_ => newState))
   })
 
+  React.useEffect1(_ => {
+    setState(_ => LoadingStates.LoadingUserDetails)
+    None
+  }, [message["authorId"]])
+
   <article>
     {isCreator
       ? <img

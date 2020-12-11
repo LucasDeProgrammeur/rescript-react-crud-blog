@@ -97,26 +97,7 @@ function MainContent(Props) {
                   }
                   
                 }));
-          var sortedMessages;
-          switch (match$1[0]) {
-            case /* ByNewest */0 :
-                sortedMessages = Belt_Array.reverse(filteredMessages);
-                break;
-            case /* ByOldest */1 :
-                sortedMessages = filteredMessages;
-                break;
-            case /* ByUsername */2 :
-                throw {
-                      RE_EXN_ID: "Match_failure",
-                      _1: [
-                        "MainContent.res",
-                        85,
-                        10
-                      ],
-                      Error: new Error()
-                    };
-            
-          }
+          var sortedMessages = match$1[0] !== 0 ? filteredMessages : Belt_Array.reverse(filteredMessages);
           tmp = Belt_Array.mapWithIndex(sortedMessages, (function (i, x) {
                   return React.createElement(BlogPostCard.make, {
                               message: x,
@@ -145,16 +126,14 @@ function MainContent(Props) {
                             return Curry._1(setSorting, (function (param) {
                                           return /* ByOldest */1;
                                         }));
+                        case "3" :
+                            return Curry._1(setSorting, (function (param) {
+                                          return /* ByUsername */2;
+                                        }));
                         default:
-                          throw {
-                                RE_EXN_ID: "Match_failure",
-                                _1: [
-                                  "MainContent.res",
-                                  25,
-                                  8
-                                ],
-                                Error: new Error()
-                              };
+                          return Curry._1(setSorting, (function (param) {
+                                        return /* ByNewest */0;
+                                      }));
                       }
                     })
                 }, React.createElement("option", {

@@ -1,3 +1,4 @@
+@bs.module("snackbar") external showSnackbar: string => unit = "show"
 @react.component
 let make = () => {
   let cookie = Cookies.getCookie("userId")[0]
@@ -25,7 +26,10 @@ let make = () => {
       }
       None
     | LoadingStates.LoadingUserDetails =>
-      DatabaseFunctions.getUserDetailsById(int_of_string(cookie), newState => setUserDetails(_ => newState))
+      DatabaseFunctions.getUserDetailsById(int_of_string(cookie), newState =>
+        setUserDetails(_ => newState)
+      )
+    | LoadingStates.ErrorLoadingUserDetails => None
     }
   })
 
@@ -33,9 +37,14 @@ let make = () => {
     <h1> {React.string("Account settings")} </h1>
     {switch userDetails {
     | LoadingStates.LoadingUserDetails => <LoadAnimation />
-    | LoadingStates.LoadedUserDetails(details) => <>
+    | LoadingStates.ErrorLoadingUserDetails => <h4> {React.string("An error occurred")} </h4>
+    | LoadingStates.LoadedUserDetails(_) => <>
         <h4> {React.string("Profile details")} </h4>
-        <p className={"urgent"}>{React.string("Please note that your handle/username cannot be changed! (Display name only)")}</p>
+        <p className={"urgent"}>
+          {React.string(
+            "Please note that your handle/username cannot be changed! (Display name only)",
+          )}
+        </p>
         <input
           className={"lineSpacing"}
           type_="text"
@@ -61,8 +70,9 @@ let make = () => {
           onClick={_ => {
             Js.log(userDetails)
             switch userDetails {
+            | LoadingStates.ErrorLoadingUserDetails => showSnackbar("Something went wrong")
             | LoadingStates.LoadingUserDetails => Js.log("Error")
-            | LoadingStates.LoadedUserDetails(details) =>
+            | LoadingStates.LoadedUserDetails(_) =>
               DatabaseFunctions.updateUserDetails(
                 cookie,
                 {"bio": bio, "profileName": profileName, "followers": followers},
@@ -73,7 +83,9 @@ let make = () => {
           {React.string("Update")}
         </button>
         <h4> {React.string("Password")} </h4>
-        <button onClick={_ => ReasonReactRouter.push("/accountSettings/changePassword")}>{React.string("Change your password")}</button>
+        <button onClick={_ => ReasonReactRouter.push("/accountSettings/changePassword")}>
+          {React.string("Change your password")}
+        </button>
       </>
     }}
   </>

@@ -27,6 +27,12 @@ function BlogPostCard(Props) {
                                     }));
                       }));
         }), []);
+  React.useEffect((function () {
+          Curry._1(setState, (function (param) {
+                  return /* LoadingUserDetails */0;
+                }));
+          
+        }), [message.authorId]);
   return React.createElement("article", undefined, isCreator ? React.createElement("img", {
                     className: "editIcon",
                     src: "https://image.flaticon.com/icons/png/512/61/61848.png",

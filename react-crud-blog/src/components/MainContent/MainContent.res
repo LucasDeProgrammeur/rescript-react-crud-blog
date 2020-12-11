@@ -25,6 +25,8 @@ let make = () => {
         switch selectValue {
         | "1" => setSorting(_ => SortStates.ByNewest)
         | "2" => setSorting(_ => SortStates.ByOldest)
+        | "3" => setSorting(_ => SortStates.ByUsername)
+        | _ => setSorting(_ => SortStates.ByNewest)
         }
       }}>
       <option value="1"> {React.string("Sort by newest")} </option>
@@ -84,6 +86,7 @@ let make = () => {
         let sortedMessages = {
           switch sorting {
           | SortStates.ByNewest => Belt.Array.reverse(filteredMessages)
+          | SortStates.ByUsername => filteredMessages
           | SortStates.ByOldest => filteredMessages
           }
         }

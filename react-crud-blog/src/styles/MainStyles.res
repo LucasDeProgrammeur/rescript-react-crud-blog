@@ -23,6 +23,8 @@ let style = j`
     margin: 20px;
 } 
 
+
+
 h1 {
     color: white;
 }
@@ -49,7 +51,7 @@ h1 {
      padding: 20px;
  }
  article {
-     background-color: white;
+     background-color: rgb(241, 245, 248);
      border-radius: 5px;
      width: 70%;
      margin: 20px auto;
@@ -107,6 +109,7 @@ select {
      padding-top: 10px;
      display: inline-block;
      cursor: pointer;
+     
  }
 
  .postContent {
@@ -198,6 +201,10 @@ textarea {
  .centerText {
      text-align: center;
  }
+
+.pointerCursor {
+    cursor: pointer;
+}
 
  .noDisplay {
      display: none;

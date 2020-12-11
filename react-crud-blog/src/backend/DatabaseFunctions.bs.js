@@ -3,8 +3,10 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var Cookies = require("../storageFunctions/Cookies.bs.js");
 var Snackbar = require("snackbar");
+var CryptoJs = require("crypto-js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var LoginStates = require("../constants/LoginStates.bs.js");
+var StatusMessages = require("../constants/StatusMessages.bs.js");
 
 function getSpecificUser(id) {
   fetch("https://localhost:44304/api/Users/" + String(id)).then(function (response) {
@@ -55,18 +57,24 @@ function showMessages(newState) {
 }
 
 function handleLogin(username, password) {
-  fetch("https://localhost:44304/api/Users/authenticate?username=" + username + "&password=" + password).then(function (response) {
+  var passwordHash = CryptoJs.MD5(password);
+  fetch("https://localhost:44304/api/Users/authenticate?username=" + username + "&password=" + passwordHash.toString()).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          LoginStates.authenticated.contents = /* LoggedIn */{
-            userId: jsonResponse.id
-          };
-          Cookies.setCookie("userId", jsonResponse.id, 2);
-          Snackbar.show("You have logged in!");
-          return Promise.resolve(jsonResponse.id);
+          if (jsonResponse.username.length === 0) {
+            Snackbar.show(StatusMessages.incorrectCredentials);
+            return Promise.resolve("incorrect");
+          } else {
+            LoginStates.authenticated.contents = /* LoggedIn */{
+              userId: jsonResponse.id
+            };
+            Cookies.setCookie("userId", jsonResponse.id, 2);
+            Snackbar.show(StatusMessages.loggedIn);
+            return Promise.resolve(jsonResponse.id);
+          }
         }).catch(function (_err) {
         LoginStates.authenticated.contents = /* LoggedOut */0;
-        Snackbar.show("Whoops, something went wrong");
+        Snackbar.show(StatusMessages.incorrectCredentials);
         console.log("Failure!!", _err);
         return Promise.resolve("error");
       });
@@ -106,7 +114,7 @@ function sendMessage(message, authorId, newState, currentState) {
             }).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          Snackbar.show("Your new message has been posted!");
+          Snackbar.show(StatusMessages.postedMessage);
           var exit = 0;
           if (typeof currentState === "number" || currentState.TAG !== /* LoadedMessages */3) {
             exit = 1;
@@ -148,7 +156,7 @@ function deleteMessage(id, currentState, newState) {
             }).then(function (response) {
             return response.json();
           }).then(function (jsonResponse) {
-          Snackbar.show("Your message has been deleted");
+          Snackbar.show(StatusMessages.deletedMessage);
           var exit = 0;
           if (typeof currentState === "number" || currentState.TAG !== /* LoadedMessages */3) {
             exit = 1;
@@ -206,19 +214,20 @@ function updateUserDetails(userId, newDetails, newState) {
               redirect: "follow"
             }).then(function (response) {
             return response.json();
-          }).then(function (response) {
-          Snackbar.show("Your (specified) user details have been updated");
+          }).then(function (param) {
+          Snackbar.show(StatusMessages.userDetailsUpdated);
           Curry._1(newState, /* LoadingUserDetails */0);
           return Promise.resolve(undefined);
         }).catch(function (_err) {
-        Snackbar.show("Whoops, something went wrong");
+        Snackbar.show(StatusMessages.error);
         return Promise.resolve(undefined);
       });
   
 }
 
 function updateUser(userId, username, password) {
-  fetch("https://localhost:44304/api/UserDetails/" + userId, {
+  var passwordHash = CryptoJs.MD5(password);
+  fetch("https://localhost:44304/api/Users/" + String(userId), {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -227,18 +236,69 @@ function updateUser(userId, username, password) {
                 credentials: "include"
               },
               body: JSON.stringify({
+                    id: userId,
                     username: username,
-                    password: password
+                    password: passwordHash.toString()
                   }),
               redirect: "follow"
             }).then(function (response) {
             return response.json();
-          }).then(function (response) {
-          Snackbar.show("Your password has been changed!");
+          }).then(function (param) {
+          Snackbar.show(StatusMessages.passwordUpdated);
           return Promise.resolve(undefined);
         }).catch(function (_err) {
-        Snackbar.show("Whoops, something went wrong");
+        Snackbar.show(StatusMessages.error);
         return Promise.resolve(undefined);
+      });
+  
+}
+
+function createProfile(profileName, userId) {
+  return fetch("https://localhost:44304/api/UserDetails/", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Access-Control-Allow-Credentials": "true",
+                    mode: "no-cors",
+                    credentials: "include"
+                  },
+                  body: JSON.stringify({
+                        profileName: profileName,
+                        followers: 0,
+                        bio: "",
+                        userId: userId
+                      }),
+                  redirect: "follow"
+                }).then(function (response) {
+                return response.json();
+              }).then(function (param) {
+              Snackbar.show(StatusMessages.accountCreated);
+              return Promise.resolve(undefined).catch(function (_err) {
+                          Snackbar.show(StatusMessages.error);
+                          return Promise.resolve(undefined);
+                        });
+            });
+}
+
+function createUser(username, password, profileName) {
+  fetch("https://localhost:44304/api/Users/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              "Access-Control-Allow-Credentials": "true",
+              mode: "no-cors",
+              credentials: "include"
+            },
+            body: JSON.stringify({
+                  username: username,
+                  password: password
+                }),
+            redirect: "follow"
+          }).then(function (response) {
+          return response.json();
+        }).then(function (response) {
+        Snackbar.show(StatusMessages.accountCreated);
+        return createProfile(profileName, response.id);
       });
   
 }
@@ -283,7 +343,7 @@ function updateMessage(id, oldMessage, newMessage, currentState, newState) {
           }
           return Promise.resolve(response);
         }).catch(function (_err) {
-        Snackbar.show("Whoops, something went wrong");
+        Snackbar.show(StatusMessages.error);
         return Promise.resolve(oldMessage);
       });
   
@@ -299,5 +359,7 @@ exports.deleteMessage = deleteMessage;
 exports.getUserDetailsById = getUserDetailsById;
 exports.updateUserDetails = updateUserDetails;
 exports.updateUser = updateUser;
+exports.createProfile = createProfile;
+exports.createUser = createUser;
 exports.updateMessage = updateMessage;
 /* snackbar Not a pure module */

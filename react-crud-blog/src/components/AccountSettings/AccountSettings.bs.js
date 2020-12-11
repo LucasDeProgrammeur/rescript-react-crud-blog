@@ -3,6 +3,7 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Cookies = require("../../storageFunctions/Cookies.bs.js");
+var Snackbar = require("snackbar");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var LoadAnimation = require("../LoadAnimation/LoadAnimation.bs.js");
@@ -35,21 +36,14 @@ function AccountSettings(Props) {
   React.useEffect(function () {
         if (typeof userDetails === "number") {
           if (userDetails !== 0) {
-            throw {
-                  RE_EXN_ID: "Match_failure",
-                  _1: [
-                    "AccountSettings.res",
-                    10,
-                    4
-                  ],
-                  Error: new Error()
-                };
+            return ;
+          } else {
+            return DatabaseFunctions.getUserDetailsById(Caml_format.caml_int_of_string(cookie), (function (newState) {
+                          return Curry._1(setUserDetails, (function (param) {
+                                        return newState;
+                                      }));
+                        }));
           }
-          return DatabaseFunctions.getUserDetailsById(Caml_format.caml_int_of_string(cookie), (function (newState) {
-                        return Curry._1(setUserDetails, (function (param) {
-                                      return newState;
-                                    }));
-                      }));
         }
         var details = userDetails._0;
         if (profileName !== undefined) {
@@ -76,78 +70,57 @@ function AccountSettings(Props) {
         }
         
       });
-  var tmp;
-  if (typeof userDetails === "number") {
-    if (userDetails !== 0) {
-      throw {
-            RE_EXN_ID: "Match_failure",
-            _1: [
-              "AccountSettings.res",
-              34,
-              5
-            ],
-            Error: new Error()
-          };
-    }
-    tmp = React.createElement(LoadAnimation.make, {});
-  } else {
-    tmp = React.createElement(React.Fragment, undefined, React.createElement("h4", undefined, "Profile details"), React.createElement("p", {
-              className: "urgent"
-            }, "Please note that your handle/username cannot be changed! (Display name only)"), React.createElement("input", {
-              className: "lineSpacing",
-              type: "text",
-              value: profileName !== undefined ? profileName : "",
-              onChange: (function (e) {
-                  var value = e.target.value;
-                  console.log(value);
-                  return Curry._1(setProfileName, (function (param) {
-                                return value;
-                              }));
-                })
-            }), React.createElement("textarea", {
-              className: "lineSpacing",
-              value: DataConverters.optionToString(bio),
-              onChange: (function (e) {
-                  var value = e.target.value;
-                  return Curry._1(setBio, (function (param) {
-                                return value;
-                              }));
-                })
-            }), React.createElement("button", {
-              onClick: (function (param) {
-                  console.log(userDetails);
-                  if (typeof userDetails !== "number") {
-                    return DatabaseFunctions.updateUserDetails(cookie, {
-                                bio: bio,
-                                profileName: profileName,
-                                followers: followers
-                              }, (function (newState) {
-                                  return Curry._1(setUserDetails, (function (param) {
-                                                return newState;
-                                              }));
-                                }));
-                  }
-                  if (userDetails !== 0) {
-                    throw {
-                          RE_EXN_ID: "Match_failure",
-                          _1: [
-                            "AccountSettings.res",
-                            63,
-                            12
-                          ],
-                          Error: new Error()
-                        };
-                  }
-                  console.log("Error");
-                  
-                })
-            }, "Update"), React.createElement("h4", undefined, "Password"), React.createElement("button", {
-              onClick: (function (param) {
-                  return ReasonReactRouter.push("/accountSettings/changePassword");
-                })
-            }, "Change your password"));
-  }
-  return React.createElement(React.Fragment, undefined, React.createElement("h1", undefined, "Account settings"), tmp);
+  return React.createElement(React.Fragment, undefined, React.createElement("h1", undefined, "Account settings"), typeof userDetails === "number" ? (
+                userDetails !== 0 ? React.createElement("h4", undefined, "An error occurred") : React.createElement(LoadAnimation.make, {})
+              ) : React.createElement(React.Fragment, undefined, React.createElement("h4", undefined, "Profile details"), React.createElement("p", {
+                        className: "urgent"
+                      }, "Please note that your handle/username cannot be changed! (Display name only)"), React.createElement("input", {
+                        className: "lineSpacing",
+                        type: "text",
+                        value: profileName !== undefined ? profileName : "",
+                        onChange: (function (e) {
+                            var value = e.target.value;
+                            console.log(value);
+                            return Curry._1(setProfileName, (function (param) {
+                                          return value;
+                                        }));
+                          })
+                      }), React.createElement("textarea", {
+                        className: "lineSpacing",
+                        value: DataConverters.optionToString(bio),
+                        onChange: (function (e) {
+                            var value = e.target.value;
+                            return Curry._1(setBio, (function (param) {
+                                          return value;
+                                        }));
+                          })
+                      }), React.createElement("button", {
+                        onClick: (function (param) {
+                            console.log(userDetails);
+                            if (typeof userDetails === "number") {
+                              if (userDetails !== 0) {
+                                Snackbar.show("Something went wrong");
+                              } else {
+                                console.log("Error");
+                              }
+                              return ;
+                            } else {
+                              return DatabaseFunctions.updateUserDetails(cookie, {
+                                          bio: bio,
+                                          profileName: profileName,
+                                          followers: followers
+                                        }, (function (newState) {
+                                            return Curry._1(setUserDetails, (function (param) {
+                                                          return newState;
+                                                        }));
+                                          }));
+                            }
+                          })
+                      }, "Update"), React.createElement("h4", undefined, "Password"), React.createElement("button", {
+                        onClick: (function (param) {
+                            return ReasonReactRouter.push("/accountSettings/changePassword");
+                          })
+                      }, "Change your password")));
 }
 
 var make = AccountSettings;
