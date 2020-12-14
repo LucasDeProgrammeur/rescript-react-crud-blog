@@ -23,7 +23,9 @@ let style = j`
     margin: 20px;
 } 
 
-
+.autoMargin {
+    margin: 0 auto;
+}
 
 h1 {
     color: white;
@@ -91,6 +93,15 @@ select {
  .biggerIcon {
     margin: 20px;
     width: 48px;
+ }
+
+ .bio {
+     padding: 20px;  
+ }
+
+ .followButton {
+     float: right;
+     padding: 10px;
  }
  
  .smallerIcon {

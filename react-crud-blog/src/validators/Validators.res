@@ -14,6 +14,9 @@ let validateSignUp = (username, password, passwordRepeat, profileName) => {
     showSnackbar("You forgot to insert one or more fields")
   } else if (password != passwordRepeat) {
       showSnackbar("Your password and repeated password field are not the same")
+  } else {
+    let passHash = toString(md5(password))
+    DatabaseFunctions.createUser(username, passHash, profileName)
   }
 }
 

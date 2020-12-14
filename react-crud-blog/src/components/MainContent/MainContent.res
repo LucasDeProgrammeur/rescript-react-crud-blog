@@ -12,13 +12,35 @@ let make = () => {
   }
   let (state, setState) = React.useState(() => LoadingStates.LoadingMessages)
   let (sorting, setSorting) = React.useState(() => SortStates.ByNewest)
+  let (followedPeople, setFollowedPeople) = React.useState(() => LoadingStates.LoadingFollowData)
+  let (followedPeopleCheck, setFollowedPeopleCheck) = React.useState(() => false)
   let (searchQuery, setSearchQuery) = React.useState(() => "")
   React.useEffect0(() => {
     DatabaseFunctions.showMessages(newState => setState(_ => newState))
   })
 
+  React.useEffect0(() => {
+    if loginCheck {
+      DatabaseFunctions.getAllFollowing(ProcessUserCookie.getLoggedInUserId(), newState =>
+        setFollowedPeople(_ => newState)
+      )
+    } else {
+      None
+    }
+  })
+
   <main>
     {loginCheck ? <AddMessageContainer newState={setState} currentState={state} /> : React.null}
+    {loginCheck
+      ? <>
+          <input
+            type_="checkbox"
+            checked={followedPeopleCheck}
+            onChange={_ => setFollowedPeopleCheck(_ => !followedPeopleCheck)}
+          />
+          <label> {React.string("Following only")} </label>
+        </>
+      : React.null}
     <select
       onChange={e => {
         let selectValue = ReactEvent.Form.target(e)["value"]
@@ -83,6 +105,24 @@ let make = () => {
             None
           }
         )
+
+        // let messagesFilteredByFollowed = switch followedPeople {
+        // | LoadingStates.LoadedFollowData(data) => Belt.Array.keepMap(
+        //     filteredMessages,
+        //     specificMessage => {
+        //       Some(Belt.Array.keepMap(data, followId => {
+        //           if followId["follows"] == specificMessage["authorId"] {
+        //             Some(specificMessage)
+        //           } else {
+        //             None
+        //           }
+        //         }))
+        //     },
+        //   )
+        // | _ => filteredMessages
+
+        // }
+
         let sortedMessages = {
           switch sorting {
           | SortStates.ByNewest => Belt.Array.reverse(filteredMessages)
@@ -90,6 +130,7 @@ let make = () => {
           | SortStates.ByOldest => filteredMessages
           }
         }
+
         sortedMessages->Belt.Array.mapWithIndex((i, x) => {
           <BlogPostCard
             key={string_of_int(i)}

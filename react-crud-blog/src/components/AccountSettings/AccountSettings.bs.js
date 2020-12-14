@@ -120,7 +120,13 @@ function AccountSettings(Props) {
                         onClick: (function (param) {
                             return ReasonReactRouter.push("/accountSettings/changePassword");
                           })
-                      }, "Change your password")));
+                      }, "Change your password"), React.createElement("h4", undefined, "Deactivate account"), React.createElement("p", {
+                        className: "urgent"
+                      }, "This will permanently remove your account. This cannot be undone"), React.createElement("button", {
+                        onClick: (function (param) {
+                            return ReasonReactRouter.push("/accountSettings/deactivateAccount");
+                          })
+                      }, "Deactivate")));
 }
 
 var make = AccountSettings;

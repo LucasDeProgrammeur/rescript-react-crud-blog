@@ -8,12 +8,13 @@ function validateSignUp(username, password, passwordRepeat, profileName) {
   if (username.length === 0 || password.length === 0 || passwordRepeat.length === 0 || profileName.length === 0) {
     Snackbar.show("You forgot to insert one or more fields");
     return ;
-  } else if (password !== passwordRepeat) {
+  }
+  if (password !== passwordRepeat) {
     Snackbar.show("Your password and repeated password field are not the same");
     return ;
-  } else {
-    return ;
   }
+  var passHash = CryptoJs.MD5(password).toString();
+  return DatabaseFunctions.createUser(username, passHash, profileName);
 }
 
 function validatePasswordChange(userId, username, currentPassword, actualCurrentPassword, newPassword, newPasswordRepeat) {

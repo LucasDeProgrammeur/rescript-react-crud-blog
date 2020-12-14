@@ -19,6 +19,21 @@ external fetch2: (
   },
 ) => Js.Promise.t<'a> = "fetch"
 
+@bs.val
+external fetch3: (
+  string,
+  {
+    "method": string,
+    "redirect": string,
+    "headers": {
+      "mode": string,
+      "Access-Control-Allow-Credentials": string,
+      "credentials": string,
+      "Content-Type": string,
+    },
+  },
+) => Js.Promise.t<'a> = "fetch"
+
 @bs.module("snackbar") external showSnackbar: string => unit = "show"
 
 type updateMessage = unit
@@ -154,6 +169,102 @@ let sendMessage = (message, authorId, newState, currentState) => {
   |> ignore
 }
 
+let followPerson = (id, personToFollowId, setState) => {
+  open Js.Promise
+  fetch2(
+    "https://localhost:44304/api/followers/",
+    {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "body": Js.Json.stringifyAny({"follower": int_of_string(id), "follows": personToFollowId}),
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    setState(LoadingStates.LoadedFollowData(jsonResponse))
+    showSnackbar(StatusMessages.profileFollowed)
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    setState(LoadingStates.ErrorLoadingFollowData)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let unfollowPerson = (id, personToFollowId, setState) => {
+  open Js.Promise
+  fetch2(
+    "https://localhost:44304/api/followers?follower=" ++ id ++ "&follows=" ++ personToFollowId,
+    {
+      "method": "DELETE",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "body": Js.Json.stringifyAny({"follower": int_of_string(id), "follows": int_of_string(personToFollowId)}),
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    setState(LoadingStates.LoadingFollowData)
+    showSnackbar(StatusMessages.profileUnFollowed)
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    setState(LoadingStates.ErrorLoadingFollowData)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let getAllFollowing = (id, setState) => {
+   open Js.Promise
+  fetch("https://localhost:44304/api/Followers/fromUser?follower=" ++ id)
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    setState(LoadingStates.LoadedFollowData(jsonResponse))
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    setState(LoadingStates.ErrorLoadingFollowData)
+    Js.Promise.resolve()
+  })
+  |> ignore
+
+  None
+}
+
+let checkIfPersonFollowsAnother = (id, personToFollowId, setState) => {
+  open Js.Promise
+  fetch("https://localhost:44304/api/followers/isfollowing?follower=" ++ id ++ "&follows=" ++ personToFollowId)
+  |> then_(response => response["json"]())
+  |> then_(jsonResponse => {
+    showSnackbar(StatusMessages.profileFollowed)
+    if (Js.Array.length(jsonResponse) != 0) {
+      setState(LoadingStates.LoadedFollowData(jsonResponse))
+    } else {
+      setState(LoadingStates.ErrorLoadingFollowData)
+    }
+    
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    setState(LoadingStates.ErrorLoadingFollowData)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 let deleteMessage = (id, currentState, newState) => {
   open Js.Promise
   fetch2(
@@ -269,6 +380,31 @@ let updateUser = (userId, username, password) => {
   |> ignore
 }
 
+let deleteUser = (userId) => {
+  open Js.Promise
+  fetch3(
+    "https://localhost:44304/api/Users/" ++ string_of_int(userId),
+    {
+      "method": "DELETE",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "redirect": "follow",
+    },
+  )
+  |> then_(response => response["json"]())
+  |> then_(_ => {
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 let createProfile = (profileName, userId) => {
   open Js.Promise
   fetch2(
@@ -360,6 +496,45 @@ let updateMessage = (id, oldMessage, newMessage, currentState, newState) => {
   |> catch(_err => {
     showSnackbar(StatusMessages.error)
     Js.Promise.resolve(oldMessage)
+  })
+  |> ignore
+}
+
+let deleteMessagesFromUser = (id) => {
+  open Js.Promise
+  fetch("https://localhost:44304/api/Messages?userId=" ++ id)
+  |> then_(response => response["json"]())
+  |> then_(response => {
+    showSnackbar("This message has been updated!")
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    showSnackbar(StatusMessages.error)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let deleteUserDetails = (id) => {
+  open Js.Promise
+  fetch3("https://localhost:44304/api/UserDetails/" ++ id, {
+      "method": "DELETE",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Credentials": "true",
+        "mode": "no-cors",
+        "credentials": "include",
+      },
+      "redirect": "follow",
+    },)
+  |> then_(response => response["json"]())
+  |> then_(response => {
+    showSnackbar(StatusMessages.accountDeleted)
+    Js.Promise.resolve()
+  })
+  |> catch(_err => {
+    showSnackbar(StatusMessages.error)
+    Js.Promise.resolve()
   })
   |> ignore
 }

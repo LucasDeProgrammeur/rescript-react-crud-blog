@@ -140,6 +140,97 @@ function sendMessage(message, authorId, newState, currentState) {
   
 }
 
+function followPerson(id, personToFollowId, setState) {
+  fetch("https://localhost:44304/api/followers/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Credentials": "true",
+                mode: "no-cors",
+                credentials: "include"
+              },
+              body: JSON.stringify({
+                    follower: Caml_format.caml_int_of_string(id),
+                    follows: personToFollowId
+                  }),
+              redirect: "follow"
+            }).then(function (response) {
+            return response.json();
+          }).then(function (jsonResponse) {
+          Curry._1(setState, /* LoadedFollowData */{
+                _0: jsonResponse
+              });
+          Snackbar.show(StatusMessages.profileFollowed);
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Curry._1(setState, /* ErrorLoadingFollowData */1);
+        return Promise.resolve(undefined);
+      });
+  
+}
+
+function unfollowPerson(id, personToFollowId, setState) {
+  fetch("https://localhost:44304/api/followers?follower=" + id + "&follows=" + personToFollowId, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Credentials": "true",
+                mode: "no-cors",
+                credentials: "include"
+              },
+              body: JSON.stringify({
+                    follower: Caml_format.caml_int_of_string(id),
+                    follows: Caml_format.caml_int_of_string(personToFollowId)
+                  }),
+              redirect: "follow"
+            }).then(function (response) {
+            return response.json();
+          }).then(function (jsonResponse) {
+          Curry._1(setState, /* LoadingFollowData */0);
+          Snackbar.show(StatusMessages.profileUnFollowed);
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Curry._1(setState, /* ErrorLoadingFollowData */1);
+        return Promise.resolve(undefined);
+      });
+  
+}
+
+function getAllFollowing(id, setState) {
+  fetch("https://localhost:44304/api/Followers/fromUser?follower=" + id).then(function (response) {
+            return response.json();
+          }).then(function (jsonResponse) {
+          Curry._1(setState, /* LoadedFollowData */{
+                _0: jsonResponse
+              });
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Curry._1(setState, /* ErrorLoadingFollowData */1);
+        return Promise.resolve(undefined);
+      });
+  
+}
+
+function checkIfPersonFollowsAnother(id, personToFollowId, setState) {
+  fetch("https://localhost:44304/api/followers/isfollowing?follower=" + id + "&follows=" + personToFollowId).then(function (response) {
+            return response.json();
+          }).then(function (jsonResponse) {
+          Snackbar.show(StatusMessages.profileFollowed);
+          if (jsonResponse.length !== 0) {
+            Curry._1(setState, /* LoadedFollowData */{
+                  _0: jsonResponse
+                });
+          } else {
+            Curry._1(setState, /* ErrorLoadingFollowData */1);
+          }
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Curry._1(setState, /* ErrorLoadingFollowData */1);
+        return Promise.resolve(undefined);
+      });
+  
+}
+
 function deleteMessage(id, currentState, newState) {
   fetch("https://localhost:44304/api/Messages/" + id, {
               method: "DELETE",
@@ -253,6 +344,26 @@ function updateUser(userId, username, password) {
   
 }
 
+function deleteUser(userId) {
+  fetch("https://localhost:44304/api/Users/" + String(userId), {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Credentials": "true",
+                mode: "no-cors",
+                credentials: "include"
+              },
+              redirect: "follow"
+            }).then(function (response) {
+            return response.json();
+          }).then(function (param) {
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        return Promise.resolve(undefined);
+      });
+  
+}
+
 function createProfile(profileName, userId) {
   return fetch("https://localhost:44304/api/UserDetails/", {
                   method: "POST",
@@ -349,17 +460,59 @@ function updateMessage(id, oldMessage, newMessage, currentState, newState) {
   
 }
 
+function deleteMessagesFromUser(id) {
+  fetch("https://localhost:44304/api/Messages?userId=" + id).then(function (response) {
+            return response.json();
+          }).then(function (response) {
+          Snackbar.show("This message has been updated!");
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Snackbar.show(StatusMessages.error);
+        return Promise.resolve(undefined);
+      });
+  
+}
+
+function deleteUserDetails(id) {
+  fetch("https://localhost:44304/api/UserDetails/" + id, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Credentials": "true",
+                mode: "no-cors",
+                credentials: "include"
+              },
+              redirect: "follow"
+            }).then(function (response) {
+            return response.json();
+          }).then(function (response) {
+          Snackbar.show(StatusMessages.accountDeleted);
+          return Promise.resolve(undefined);
+        }).catch(function (_err) {
+        Snackbar.show(StatusMessages.error);
+        return Promise.resolve(undefined);
+      });
+  
+}
+
 exports.getSpecificUser = getSpecificUser;
 exports.getUsersByName = getUsersByName;
 exports.showMessages = showMessages;
 exports.handleLogin = handleLogin;
 exports.getUserById = getUserById;
 exports.sendMessage = sendMessage;
+exports.followPerson = followPerson;
+exports.unfollowPerson = unfollowPerson;
+exports.getAllFollowing = getAllFollowing;
+exports.checkIfPersonFollowsAnother = checkIfPersonFollowsAnother;
 exports.deleteMessage = deleteMessage;
 exports.getUserDetailsById = getUserDetailsById;
 exports.updateUserDetails = updateUserDetails;
 exports.updateUser = updateUser;
+exports.deleteUser = deleteUser;
 exports.createProfile = createProfile;
 exports.createUser = createUser;
 exports.updateMessage = updateMessage;
+exports.deleteMessagesFromUser = deleteMessagesFromUser;
+exports.deleteUserDetails = deleteUserDetails;
 /* snackbar Not a pure module */

@@ -2,31 +2,15 @@
 
 @react.component
 let make = (~profileId) => {
-
-  let (userDetails, setUserDetails) = React.useState(() =>
-    LoadingStates.LoadingUserDetails
-  )
-
+  let (userDetails, setUserDetails) = React.useState(() => LoadingStates.LoadingUserDetails)
   React.useEffect0(() => {
-    {
-      open Js.Promise
-      fetch("https://localhost:44304/api/UserDetails/" ++ profileId)
-      |> then_(response => response["json"]())
-      |> then_(jsonResponse => {
-        setUserDetails(_previousState => LoadingStates.LoadedUserDetails(
-          jsonResponse,
-        ))
-        Js.Promise.resolve()
-      })
-      |> catch(_err => {
-        setUserDetails(_previousState => LoadingStates.ErrorLoadingUserDetails)
-        Js.Promise.resolve()
-      })
-      |> ignore
+    switch userDetails {
+    | LoadingStates.LoadingUserDetails =>
+      DatabaseFunctions.getUserDetailsById(profileId, newState => setUserDetails(_ => newState))
     }
+  })
 
-    None
-})
+
   <>
     {switch userDetails {
     | LoadingStates.ErrorLoadingUserDetails =>
@@ -34,10 +18,17 @@ let make = (~profileId) => {
     | LoadingStates.LoadingUserDetails => <LoadAnimation />
     | LoadingStates.LoadedUserDetails(userDetails) => <>
         <h1>
-          {React.string("User details of: " ++ userDetails["profileName"] ++ ", " ++ string_of_int(userDetails["followers"]) ++ " followers.")}
+          {React.string(
+            "User details of: " ++
+            userDetails["profileName"] ++
+            ", " ++
+            string_of_int(userDetails["followers"]) ++ " followers.",
+          )}
         </h1>
-        <article className="bio">{React.string(userDetails["bio"])}</article>
-        
+        <article className="bio">
+          {React.string(userDetails["bio"])}
+        <FollowButton profileId={profileId} />
+        </article>
       </>
     }}
   </>

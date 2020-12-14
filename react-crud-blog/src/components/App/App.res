@@ -9,9 +9,10 @@ let make = () => {
       | list{"home"} => <MainContent />
       | list{"signUp"} => <SignUp />
       | list{"accountSettings", "changePassword"} => <ChangePassword />
-      | list{"profile", id} => <UserProfile profileId={id} />
+      | list{"profile", id} => <UserProfile profileId={int_of_string(id)} />
       | list{"authentication"} => <Authentication />
       | list{"accountSettings"} => <AccountSettings />
+      | list{"accountSettings", "deactivateAccount"} => <DeactivateAccount />
       | _ => <MainContent />
       }}
     </div>

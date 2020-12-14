@@ -24,16 +24,35 @@ function MainContent(Props) {
       });
   var setSorting = match$1[1];
   var match$2 = React.useState(function () {
+        return /* LoadingFollowData */0;
+      });
+  var setFollowedPeople = match$2[1];
+  var match$3 = React.useState(function () {
+        return false;
+      });
+  var setFollowedPeopleCheck = match$3[1];
+  var followedPeopleCheck = match$3[0];
+  var match$4 = React.useState(function () {
         return "";
       });
-  var setSearchQuery = match$2[1];
-  var searchQuery = match$2[0];
+  var setSearchQuery = match$4[1];
+  var searchQuery = match$4[0];
   React.useEffect((function () {
           return DatabaseFunctions.showMessages(function (newState) {
                       return Curry._1(setState, (function (param) {
                                     return newState;
                                   }));
                     });
+        }), []);
+  React.useEffect((function () {
+          if (loginCheck) {
+            return DatabaseFunctions.getAllFollowing(ProcessUserCookie.getLoggedInUserId(undefined), (function (newState) {
+                          return Curry._1(setFollowedPeople, (function (param) {
+                                        return newState;
+                                      }));
+                        }));
+          }
+          
         }), []);
   var tmp;
   if (typeof state === "number") {
@@ -114,7 +133,15 @@ function MainContent(Props) {
   return React.createElement("main", undefined, loginCheck ? React.createElement(AddMessageContainer.make, {
                     newState: setState,
                     currentState: state
-                  }) : null, React.createElement("select", {
+                  }) : null, loginCheck ? React.createElement(React.Fragment, undefined, React.createElement("input", {
+                        checked: followedPeopleCheck,
+                        type: "checkbox",
+                        onChange: (function (param) {
+                            return Curry._1(setFollowedPeopleCheck, (function (param) {
+                                          return !followedPeopleCheck;
+                                        }));
+                          })
+                      }), React.createElement("label", undefined, "Following only")) : null, React.createElement("select", {
                   onChange: (function (e) {
                       var selectValue = e.target.value;
                       switch (selectValue) {

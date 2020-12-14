@@ -86,6 +86,13 @@ let make = () => {
         <button onClick={_ => ReasonReactRouter.push("/accountSettings/changePassword")}>
           {React.string("Change your password")}
         </button>
+        <h4> {React.string("Deactivate account")} </h4>
+        <p className={"urgent"}>
+          {React.string("This will permanently remove your account. This cannot be undone")}
+        </p>
+        <button onClick={_ => ReasonReactRouter.push("/accountSettings/deactivateAccount")}>
+          {React.string("Deactivate")}
+        </button>
       </>
     }}
   </>

@@ -25,3 +25,8 @@ type userProfilesState =
   | LoadingProfiles
   | ErrorLoadingProfiles
   | LoadedProfiles(DatabaseContexts.userProfiles)
+
+type followDataState = 
+  | LoadingFollowData
+  | ErrorLoadingFollowData
+  | LoadedFollowData(DatabaseContexts.followData)
